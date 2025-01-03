@@ -3,6 +3,7 @@
 #include "Global.h"
 #include "GameScene.h"
 #include "GoldCoin.h"
+#include "GoldCoinView.h"
 #include "SelectScene.h"
 #include "Level1.h"
 using namespace cocos2d;
@@ -42,11 +43,13 @@ bool GameScene::init()
     /* 显示金币数量 */
     // 创建 GoldCoin 对象
     goldCoin = GoldCoin::create();
+    goldCoinView = GoldCoinView::create(goldCoin);
 
     if (goldCoin && goldCoin->init())
     {
-        // 将 GoldCoin 对象添加到场景中
+        // 将 GoldCoin 和 GoldCoinView 添加到场景中
         this->addChild(goldCoin);
+        this->addChild(goldCoinView);
 
         // 假设当前金币数量为 500
         int currentGold = 500;

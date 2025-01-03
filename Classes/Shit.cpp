@@ -13,9 +13,9 @@ Shit* Shit::create(const Vec2& position) {
         shit->autorelease();
         shit->setPosition(position);
 
-        shit->attackDamage = 50;     // …Ë÷√π•ª˜…À∫¶
-        shit->attackRange = 200.0f;  // …Ë÷√π•ª˜∑∂Œß
-        shit->attackSpeed = 1000.0f; // …Ë÷√π•ª˜ÀŸ∂»
+        shit->attackDamage = 50;     // ÔøΩÔøΩÔøΩ√πÔøΩÔøΩÔøΩÔøΩÀ∫ÔøΩ
+        shit->attackRange = 200.0f;  // ÔøΩÔøΩÔøΩ√πÔøΩÔøΩÔøΩÔøΩÔøΩŒß
+        shit->attackSpeed = 1000.0f; // ÔøΩÔøΩÔøΩ√πÔøΩÔøΩÔøΩÔøΩŸ∂ÔøΩ
         shit->timeSinceLastAttack = 0;
         shits.push_back(shit);
         return shit;
@@ -29,16 +29,16 @@ void Shit::upgrade()
     if (level < 3 && goldCoin->m_value > 120) {
         level++;
 
-        // ∏¸–¬Õ‚π€
+        // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
         std::string textureName = "Tower/Shit/Level" + std::to_string(level) + ".PNG";
         setTexture(textureName);
 
-        // ’Ω¡¶Ã·…˝
+        // ’ΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
         attackSpeed += 400;
         attackDamage += 50;
         attackRange += 100;
 
-        // ø€«Æ
+        // ÔøΩÔøΩ«Æ
         goldCoin->earnGold(-120);
     }
 }
@@ -52,17 +52,17 @@ void Shit::remove()
     else
         goldCoin->earnGold(180);
 
-    // …æ≥˝Ãÿ–ß
+    // …æÔøΩÔøΩÔøΩÔøΩ–ß
     auto Delete = cocos2d::Sprite::create("Tower/Tower_Delete.PNG");
     Delete->setPosition(this->getPosition());
     this->getParent()->addChild(Delete);
 
-    // …Ë÷√“ª∏ˆ∂Ø◊˜¿¥“∆≥˝…æ≥˝Ãÿ–ß
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ≥÷–¯ ±º‰ø…“‘∏˘æ›–Ë“™µ˜’˚
+    // ÔøΩÔøΩÔøΩÔøΩ“ªÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ∆≥ÔøΩ…æÔøΩÔøΩÔøΩÔøΩ–ß
+    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ÔøΩÔøΩÔøΩÔøΩ ±ÔøΩÔøΩÔøΩÔøΩ‘∏ÔøΩÔøΩÔøΩÔøΩÔøΩ“™ÔøΩÔøΩÔøΩÔøΩ
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     Delete->runAction(sequence);
-    /****1/2∏¸–¬ ÷∏’ÎœÚ¡ø÷√¡„*****************************/
+    /****1/2ÔøΩÔøΩÔøΩÔøΩ ÷∏ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ*****************************/
     for (auto iter = shits.begin(); iter != shits.end();)
     {
         if (this == *iter)
@@ -77,34 +77,6 @@ void Shit::remove()
     this->hideAttackRangeAndButtons();
     this->removeAllChildren();
     this->removeFromParentAndCleanup(true);
-}
-
-void Shit::update(float dt, std::vector<Monster*> monsters) {
-    timeSinceLastAttack += dt;
-    if (timeSinceLastAttack >= 1) {
-        checkForMonstersInRange(monsters);
-        if (!monstersInRange.empty()) {
-            attack(monstersInRange.front()); // π•ª˜µ⁄“ª∏ˆπ÷ŒÔ
-            timeSinceLastAttack = 0;
-        }
-    }
-}
-
-bool Shit::isMonsterInRange(Monster* monster) {
-    return (getPosition().distance(monster->getPosition()) <= attackRange);
-}
-
-void Shit::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // ºŸ…Ë monsters  «≥°æ∞÷–À˘”–π÷ŒÔµƒ¡–±Ì
-    monstersInRange.clear();
-    if (monsters.size())
-    {
-        for (Monster* monster : monsters) {
-            if (isMonsterInRange(monster)) {
-                monstersInRange.push_back(monster);
-            }
-        }
-    }
 }
 
 void Shit::attack(Monster* target) {

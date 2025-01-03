@@ -3,36 +3,54 @@
 
 #include "cocos2d.h"
 #include "Monster.h"
+#include "TowerState.h"
 #include "ui/CocosGUI.h"
 using namespace cocos2d;
 using namespace cocos2d::ui;
 
-class Tower : public cocos2d::Sprite
-{
+// Refactored with State Pattern
+class Tower : public cocos2d::Sprite {
+protected:
+    int level;
+    int towerType;
+    float attackRange;
+    float attackSpeed;
+    float timeSinceLastAttack;
+    int attackDamage;
+    TowerState* currentState;
+    
+    std::vector<Monster*> monstersInRange;
+    cocos2d::ui::Button* upgradeButton;
+    cocos2d::ui::Button* removeButton;
+    cocos2d::Sprite* attackRange_;
+
 public:
     Tower();
-    /*virtual ~Tower();//ÔÚspriteÀàÖĞÒÑ¾­ÓĞÎö¹¹º¯ÊıÁË*/
-
-    static Tower* create(Vec2 position,int towerType);//´´½¨Ò»¸öËş£¬ÔÚÖ¸¶¨Î»ÖÃ¼ÓÔØÍ¼Æ¬
-
-    virtual bool init() override;//ÅĞ¶Ï³õÊ¼»¯ÊÇ·ñ³É¹¦
-    virtual void attack();//¹¥»÷£¬ÊµÀı»¯Ò»¸öbullet£¬Ñ°Â·£¬µ½¹ÖÎïÉíÉÏÏûÊ§£¬ÔÙ´ÎÉú³É¡£Ãé×¼Ê±Òª¸Ä±ä½Ç¶È
-    virtual void upgrade() ;//Éı¼¶£¬¸÷ÏîÊôĞÔµÄÉı¼¶£¬¸Ä±äÍ¼Æ¬
-    virtual void remove() ;//ÒÆ³ı
-    void showAttackRange(); // ÏÔÊ¾¹¥»÷·¶Î§
-    void showUpgradeAndRemoveButtons(); // ÏÔÊ¾Éı¼¶ºÍÒÆ³ı°´Å¥
+    virtual ~Tower();
+    
+    static Tower* create(cocos2d::Vec2 position, int towerType);
+    virtual bool init() override;
+    
+    // çŠ¶æ€ç›¸å…³
+    void changeState(TowerState* newState);
+    TowerState* getCurrentState() const { return currentState; }
+    
+    // æ”»å‡»ç›¸å…³
+    virtual void attack(Monster* target) = 0;
+    float getAttackRange() const { return attackRange; }
+    float getAttackInterval() const { return 1.0f / attackSpeed; }
+    int getDamage() const { return attackDamage; }
+    bool isMonsterInRange(Monster* monster);
+    void checkForMonstersInRange(std::vector<Monster*> monsters);
+    
+    // å¡”çš„åŠŸèƒ½
+    virtual void upgrade() = 0;
+    virtual void remove();
+    void showAttackRange();
+    void showUpgradeAndRemoveButtons();
     void hideAttackRangeAndButtons();
-protected:
-    int level; // µÈ¼¶
-    int towerType;
-    std::vector<Monster*> monstersInRange; // ÔÚ·¶Î§ÄÚµÄ¹ÖÎïÊı×é
-    int attackDamage; // ¹¥»÷ÉËº¦
-    float attackRange; //¹¥»÷·¶Î§
-    float attackSpeed; // ¹¥»÷ËÙ¶È
-    float timeSinceLastAttack;
-
-    cocos2d::ui::Button* upgradeButton; // Éı¼¶°´Å¥
-    cocos2d::ui::Button* removeButton;  // ÒÆ³ı°´Å¥
-    Sprite* attackRange_;
+    
+    // æ›´æ–°å‡½æ•°
+    virtual void update(float dt, std::vector<Monster*> monsters);
 };
 #endif

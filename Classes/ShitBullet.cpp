@@ -37,9 +37,12 @@ void ShitBullet::moveToTarget() {
         float distance = direction.length();
         // 子弹旋转
         if (distance < 10.0f) { // 如果子弹接近目标
-            target->getAttacked(damage); // 对怪物造成伤害
+            // target->getAttacked(damage); // 对怪物造成伤害
             /****1/2更新 怪物受攻击特效*****************************/
-            target->beSloweddown();
+            // target->beSloweddown();
+
+            // Refactored with State Pattern
+            target->handleSlowEffect(damage);
             /*******************************************************/
             this->stopAllActions();
             this->removeFromParent();

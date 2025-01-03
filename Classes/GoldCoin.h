@@ -2,19 +2,22 @@
 #define __GOLD_COIN_H__
 
 #include "cocos2d.h"
+#include "Subject.h"
 
-USING_NS_CC;
-
-class GoldCoin : public Node
-{
-public:
-
+// Refactored with Observer Pattern
+class GoldCoin : public cocos2d::Node, public Subject {
+private:
     int m_value;
-    Label* m_label;
+    void notifyGoldChanged();
 
+public:
     virtual bool init() override;
-  
-    //更新金币
+    
+    // 获取/设置金币值
+    int getValue() const { return m_value; }
+    void setValue(int value);
+    
+    // 金币操作
     void updateGoldValue(int goldValue);
 
 
@@ -25,8 +28,6 @@ public:
     bool purchaseTower(int cost);
 
     CREATE_FUNC(GoldCoin);
-
-private:
-    void updateGoldLabel();
 };
+
 #endif

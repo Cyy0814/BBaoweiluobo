@@ -1,8 +1,13 @@
 #ifndef __LEVEL1_SCENE_H__
 #define __LEVEL1_SCENE_H__
-#include "Monster.h"
-#include "GameScene.h"
+
 #include "cocos2d.h"
+#include "GameScene.h"
+#include "Monster.h"
+#include "Carrot.h"
+#include "CarrotView.h"
+#include "GoldCoin.h"
+#include "GoldCoinView.h"
 
 using namespace cocos2d;
 using namespace std;
