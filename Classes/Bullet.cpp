@@ -27,20 +27,30 @@ void Bullet::moveToTarget() {
         return;
     }
 
-    // ¼ÆËãÒÆ¶¯µ½Ä¿±êµÄÊ±¼ä
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     float distance = this->getPosition().distance(target->getPosition());
     float duration = distance / speed;
 
-    // ´´½¨ÒÆ¶¯¶¯×÷
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
     auto moveAction = MoveTo::create(duration, target->getPosition());
     auto removeSelf = RemoveSelf::create();
     auto damageCallback = CallFunc::create([this]() {
         if (target) {
-            target->getAttacked(damage); // ¶Ô¹ÖÎïÔì³ÉÉËº¦
+            target->getAttacked(damage); // ï¿½Ô¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½
         }
         });
 
-    // ÔËÐÐ¶¯×÷ÐòÁÐ
+    // ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     auto sequence = Sequence::create(moveAction, damageCallback, removeSelf, nullptr);
     this->runAction(sequence);
+}
+
+void Bullet::setTarget(Monster* target) {
+    this->target = target;
+}
+
+void Bullet::onHitMonster(Monster* monster) {
+    if (monster) {
+        monster->getAttacked(damage);
+    }
 }

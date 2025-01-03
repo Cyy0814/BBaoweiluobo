@@ -9,18 +9,18 @@ USING_NS_CC;
 
 Fan* Fan::create(const Vec2& position) {
     Fan* fan = new (std::nothrow) Fan();
-    if (fan && fan->init()) { // Ê¹ÓÃÄúµÄÅÚËşÍ¼Æ¬
+    if (fan && fan->init()) { // Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
         auto base = Sprite::create("Tower/Fan/ID4_0.PNG");
         base->setPosition(fan->getPosition().x + 20, fan->getPosition().y + 10);
         fan->addChild(base, -1);
 
-        fan->setTexture("Tower/Fan/Level1.PNG"); // ³õÊ¼Íâ¹Û
+        fan->setTexture("Tower/Fan/Level1.PNG"); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½
         fan->autorelease();
         fan->setPosition(position.x + 5, position.y + 10);
 
-        fan->attackDamage = 100;    // ÉèÖÃ¹¥»÷ÉËº¦
-        fan->attackRange = 200.0f;  // ÉèÖÃ¹¥»÷·¶Î§
-        fan->attackSpeed = 1000.0f; // ÉèÖÃ¹¥»÷ËÙ¶È
+        fan->attackDamage = 100;    // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ëºï¿½
+        fan->attackRange = 200.0f;  // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½Î§
+        fan->attackSpeed = 1000.0f; // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
         fan->timeSinceLastAttack = 0;
         fans.push_back(fan);
 
@@ -34,16 +34,16 @@ void Fan::upgrade()
     if (level < 3 && goldCoin->m_value > 120) {
         level++;
 
-        // ¸üĞÂÍâ¹Û
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         std::string textureName = "Tower/Fan/Level" + std::to_string(level) + ".PNG";
         setTexture(textureName);
 
-        // Õ½Á¦ÌáÉı
+        // Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         attackSpeed += 400;
         attackDamage += 150;
         attackRange += 100;
 
-        // ¿ÛÇ®
+        // ï¿½ï¿½Ç®
         goldCoin->earnGold(-120);
     }
 }
@@ -57,17 +57,17 @@ void Fan::remove()
     else
         goldCoin->earnGold(180);
 
-    // É¾³ıÌØĞ§
+    // É¾ï¿½ï¿½ï¿½ï¿½Ğ§
     auto Delete = cocos2d::Sprite::create("Tower/Tower_Delete.PNG");
     Delete->setPosition(this->getPosition());
     this->getParent()->addChild(Delete);
 
-    // ÉèÖÃÒ»¸ö¶¯×÷À´ÒÆ³ıÉ¾³ıÌØĞ§
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ³ÖĞøÊ±¼ä¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ğ§
+    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ô¸ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     Delete->runAction(sequence);
-    /****1/2¸üĞÂ Ö¸ÕëÏòÁ¿ÖÃÁã*****************************/
+    /****1/2ï¿½ï¿½ï¿½ï¿½ Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*****************************/
     for (auto iter = fans.begin(); iter != fans.end();)
     {
         if (this == *iter)
@@ -90,7 +90,7 @@ void Fan::update(float dt, std::vector<Monster*> monsters) {
     if (timeSinceLastAttack >= 1) {
         checkForMonstersInRange(monsters);
         if (!monstersInRange.empty()) {
-            attack(monstersInRange.front()); // ¹¥»÷µÚÒ»¸ö¹ÖÎï
+            attack(monstersInRange.front()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             timeSinceLastAttack = 0;
         }
     }
@@ -101,7 +101,7 @@ bool Fan::isMonsterInRange(Monster* monster) {
 }
 
 void Fan::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // ¼ÙÉè monsters ÊÇ³¡¾°ÖĞËùÓĞ¹ÖÎïµÄÁĞ±í
+    // ï¿½ï¿½ï¿½ï¿½ monsters ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
     monstersInRange.clear();
     if (monsters.size())
     {
@@ -113,8 +113,16 @@ void Fan::checkForMonstersInRange(std::vector<Monster*> monsters) {
     }
 }
 
+//----------------------------refactored with flyweight----------------------------//
 void Fan::attack(Monster* target) {
-    auto fanbullet = FanBullet::createWithTarget(target, "Resource/Tower/Fan/ID1_0.PNG", attackSpeed, attackDamage);
-    fanbullet->setPosition(getPosition());
-    this->getParent()->addChild(fanbullet);
+    // ä½¿ç”¨äº«å…ƒå·¥å‚è·å–å­å¼¹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Fan/ID1_0.PNG", attackSpeed, attackDamage);
+    
+    // è®¾ç½®ç›®æ ‡å¹¶æ·»åŠ åˆ°åœºæ™¯
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet) {
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(getPosition());
+        this->getParent()->addChild(concreteBullet);
+    }
 }

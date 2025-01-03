@@ -12,19 +12,19 @@ USING_NS_CC;
 Bottle* Bottle::create(const Vec2& position) {
     Bottle* bottle = new (std::nothrow) Bottle();
     if (bottle && bottle->init()) {
-        //1/2 ³¢ÊÔ½«baseÖÆ³É³ÉÔ±±äÁ¿£¬Ï£Íû´ïµ½ÔÚupgradeÊ±²»»áÖØ¸´³öÏÖ
+        //1/2 ï¿½ï¿½ï¿½Ô½ï¿½baseï¿½Æ³É³ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ïµ½ï¿½ï¿½upgradeÊ±ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
         bottle->base = Sprite::create("Tower/Bottle/ID1_11.PNG");
         bottle->base->setPosition(bottle->getPosition().x + 15, bottle->getPosition().y + 25);
         
         bottle->addChild(bottle->base, -1);
 
-        bottle->setTexture("Tower/Bottle/ID1_22.PNG"); // ³õÊ¼Íâ¹Û
+        bottle->setTexture("Tower/Bottle/ID1_22.PNG"); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½
         bottle->autorelease();
         bottle->setPosition(position);
 
-        bottle->attackDamage = 100;    // ÉèÖÃ¹¥»÷ÉËº¦
-        bottle->attackRange = 200.0f;  // ÉèÖÃ¹¥»÷·¶Î§
-        bottle->attackSpeed = 1000.0f; // ÉèÖÃ¹¥»÷ËÙ¶È
+        bottle->attackDamage = 100;    // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ëºï¿½
+        bottle->attackRange = 200.0f;  // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½Î§
+        bottle->attackSpeed = 1000.0f; // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
         bottle->timeSinceLastAttack = 0;
         bottles.push_back(bottle);
         return bottle;
@@ -38,16 +38,16 @@ void Bottle::upgrade()
     if (level < 3 && goldCoin->m_value > 70) {
         level++;
 
-        // ¸üĞÂÍâ¹Û
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         std::string textureName = "Tower/Bottle/Level" + std::to_string(level) + ".PNG";
         setTexture(textureName);
        // this->base->setPosition(this->getPosition().x + 15, this->getPosition().y + 25);
-        // Õ½Á¦ÌáÉı
+        // Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         attackSpeed += 400;
         attackDamage += 50;
         attackRange += 100;
 
-        // ¿ÛÇ®
+        // ï¿½ï¿½Ç®
         goldCoin->earnGold(-70);
     }
 }
@@ -61,17 +61,17 @@ void Bottle::remove()
     else
         goldCoin->earnGold(180);
 
-    // É¾³ıÌØĞ§
+    // É¾ï¿½ï¿½ï¿½ï¿½Ğ§
     auto Delete = cocos2d::Sprite::create("Tower/Tower_Delete.PNG");
     Delete->setPosition(this->getPosition());
     this->getParent()->addChild(Delete);
 
-    // ÉèÖÃÒ»¸ö¶¯×÷À´ÒÆ³ıÉ¾³ıÌØĞ§
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ³ÖĞøÊ±¼ä¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ğ§
+    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ô¸ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     Delete->runAction(sequence);
-    /****1/2¸üĞÂ Ö¸ÕëÏòÁ¿ÖÃÁã*****************************/
+    /****1/2ï¿½ï¿½ï¿½ï¿½ Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*****************************/
     for (auto iter = bottles.begin(); iter != bottles.end();)
     {
         if (this == *iter)
@@ -97,17 +97,17 @@ void Bottle::update(float dt, std::vector<Monster*> monsters) {
             cocos2d::Vec2 towerPosition = getPosition();
             cocos2d::Vec2 targetPosition = monstersInRange[0]->getPosition();
 
-            // ¼ÆËãËşÖ¸ÏòÄ¿±êµÄÏòÁ¿
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             cocos2d::Vec2 direction = targetPosition - towerPosition;
-            direction.normalize();  // ½«ÏòÁ¿¹éÒ»»¯Îªµ¥Î»ÏòÁ¿
+            direction.normalize();  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Îªï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
 
-            // ¼ÆËãĞı×ª½Ç¶È
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¶ï¿½
             float angle = CC_RADIANS_TO_DEGREES(atan2(direction.y, direction.x)) - 90;
             auto rotateAction = cocos2d::RotateBy::create(0.01f, angle);
             this->runAction(rotateAction);
 
 
-            attack(monstersInRange.front()); // ¹¥»÷µÚÒ»¸ö¹ÖÎï
+            attack(monstersInRange.front()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             timeSinceLastAttack = 0;
         }
     }
@@ -118,7 +118,7 @@ bool Bottle::isMonsterInRange(Monster* monster) {
 }
 
 void Bottle::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // ¼ÙÉè monsters ÊÇ³¡¾°ÖĞËùÓĞ¹ÖÎïµÄÁĞ±í
+    // ï¿½ï¿½ï¿½ï¿½ monsters ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
     monstersInRange.clear();
     if (monsters.size())
     {
@@ -130,8 +130,16 @@ void Bottle::checkForMonstersInRange(std::vector<Monster*> monsters) {
     }
 }
 
+//----------------------------refactored with flyweight----------------------------//
 void Bottle::attack(Monster* target) {
-    bullet = Bullet::createWithTarget(target, "Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
-    bullet->setPosition(getPosition());
-    this->getParent()->addChild(bullet);
+    // ä½¿ç”¨äº«å…ƒå·¥å‚è·å–å­å¼¹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
+    
+    // è®¾ç½®ç›®æ ‡å¹¶æ·»åŠ åˆ°åœºæ™¯
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet) {
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(getPosition());
+        this->getParent()->addChild(concreteBullet);
+    }
 }

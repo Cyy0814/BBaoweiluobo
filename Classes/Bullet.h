@@ -4,15 +4,19 @@
 
 #include "cocos2d.h"
 #include "Monster.h"
+#include "Flyweight.h"
 
-class Bullet : public cocos2d::Sprite {
+//----------------------------refactored with flyweight----------------------------//
+class Bullet : public cocos2d::Sprite, public Flyweight {
 public:
     static Bullet* createWithTarget(Monster* target, const std::string& filename, float speed, int damage);
     void initOptions(Monster* target, float speed, int damage);
-    void moveToTarget();
-    void onHitMonster(Monster* monster);
+    
+    virtual void moveToTarget() override;
+    virtual void onHitMonster(Monster* monster) override;
+    virtual void setTarget(Monster* target) override;
 
-private:
+protected:
     Monster* target;
     float speed;
     int damage;

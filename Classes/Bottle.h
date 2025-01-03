@@ -6,12 +6,13 @@
 #include "BottleBullet.h"
 #include "Tower.h"
 #include "ui/CocosGUI.h"
+#include "BulletFlyweightFactory.h"
 
 class Bottle : public Tower {
 public:
     static Bottle* create(const cocos2d::Vec2& position);
 
-    // ¹¥»÷Ïà¹ØÂß¼­
+    // ß¼
     void update(float dt, std::vector<Monster*> monsters);
     bool isMonsterInRange(Monster* monster);
     void checkForMonstersInRange(std::vector<Monster*> monsters);
@@ -21,7 +22,6 @@ public:
     void remove() override;
 
 private:
-    Bullet* bullet;
     Sprite* base;
 };
 

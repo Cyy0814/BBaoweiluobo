@@ -17,9 +17,9 @@ public:
     void dropCoins();
     void removeFromMonstersArray(Monster* monster);
 
-    CC_SYNTHESIZE_READONLY(int, _hitPoints, HitPoints); // Ê¹ÓÃ CC_SYNTHESIZE_READONLY ºêÀ´´´½¨ getter ·½·¨
+    CC_SYNTHESIZE_READONLY(int, _hitPoints, HitPoints); // Ê¹ï¿½ï¿½ CC_SYNTHESIZE_READONLY ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ getter ï¿½ï¿½ï¿½ï¿½
     CC_SYNTHESIZE_READONLY(int, _monsterType, MonsterType);
-    CC_SYNTHESIZE_READONLY(cocos2d::Label*, _hpLabel, HPLabel); // ÉúÃüÖµÏÔÊ¾
+    CC_SYNTHESIZE_READONLY(cocos2d::Label*, _hpLabel, HPLabel); // ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Ê¾
 
     void takeHalfspeed()
     {
@@ -32,6 +32,17 @@ public:
         bottomSprite->setPosition(cocos2d::Vec2(40, -bottomSprite->getContentSize().height / 2 + 10));
     }
 
+    void setMoveCallback(std::function<void()> callback) {
+        moveCallback = callback;
+    }
+    
+    void startMoving() {
+        if (moveCallback) {
+            moveCallback();
+        } else {
+            CCLOG("Warning: Monster move callback not set!");
+        }
+    }
 
 protected:
     Monster(int monsterType, int hitPoints);
@@ -40,7 +51,8 @@ protected:
 private:
     bool isAlive = true;
     void updateHPLabel();
-    void die(); // µ±¹ÖÎïËÀÍöÊ±µ÷ÓÃ
+    void die(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+    std::function<void()> moveCallback;
 };
 
 #endif

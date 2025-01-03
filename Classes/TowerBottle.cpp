@@ -12,12 +12,12 @@ USING_NS_CC;
 
 Bottle* Bottle::create(const Vec2& position) {
     Bottle* bottle = new (std::nothrow) Bottle();
-    if (bottle && bottle->initWithFile("Tower/Bottle/ID1_22.PNG")) { // Ê¹ÓÃÄúµÄÅÚËþÍ¼Æ¬
-        bottle->setTexture("Tower/Bottle/ID1_22.PNG"); // ³õÊ¼Íâ¹Û
+    if (bottle && bottle->initWithFile("Tower/Bottle/ID1_22.PNG")) { // Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
+        bottle->setTexture("Tower/Bottle/ID1_22.PNG"); // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½
         bottle->autorelease();
         bottle->setPosition(position);
-        bottle->attackRange = 1000.0f; // ÉèÖÃ¹¥»÷·¶Î§
-        bottle->attackSpeed = 1.0f; // ÉèÖÃ¹¥»÷ËÙ¶È
+        bottle->attackRange = 1000.0f; // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½Î§
+        bottle->attackSpeed = 1.0f; // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
         bottle->timeSinceLastAttack = 0;
         bottles.push_back(bottle);
         return bottle;
@@ -33,9 +33,9 @@ void Bottle::showAttackRange()  {
 
 }
 void Bottle::showUpgradeAndRemoveButtons()  {
-    // ´´½¨Éý¼¶°´Å¥
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
     upgradeButton = cocos2d::ui::Button::create("GameScene/Tower/Btn_CanUpLevel.png");
-    upgradeButton->setPosition(Vec2(10, 110)); // ÉèÖÃÎ»ÖÃ
+    upgradeButton->setPosition(Vec2(10, 110)); // ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
     upgradeButton->addTouchEventListener([this](Ref* sender, cocos2d::ui::Widget::TouchEventType type) {
         if (type == cocos2d::ui::Widget::TouchEventType::ENDED) {
             this->upgrade();
@@ -43,9 +43,9 @@ void Bottle::showUpgradeAndRemoveButtons()  {
         });
     this->addChild(upgradeButton);
 
-    // ´´½¨ÒÆ³ý°´Å¥
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½Å¥
     removeButton = cocos2d::ui::Button::create("GameScene/Tower/Btn_SellTower.png");
-    removeButton->setPosition(Vec2(10, -50)); // ÉèÖÃÎ»ÖÃ
+    removeButton->setPosition(Vec2(10, -50)); // ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
     removeButton->addTouchEventListener([this](Ref* sender, cocos2d::ui::Widget::TouchEventType type) {
         if (type == cocos2d::ui::Widget::TouchEventType::ENDED) {
             this->remove();
@@ -53,49 +53,50 @@ void Bottle::showUpgradeAndRemoveButtons()  {
         });
     this->addChild(removeButton);
 
-    // Ìí¼ÓÒ»¸öÈ«¾Ö´¥Ãþ¼àÌýÆ÷
+    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½È«ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     auto globalListener = EventListenerTouchOneByOne::create();
-    globalListener->setSwallowTouches(false); // ²»ÍÌÊÉ´¥ÃþÊÂ¼þ
+    globalListener->setSwallowTouches(false); // ï¿½ï¿½ï¿½ï¿½ï¿½É´ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
     globalListener->onTouchBegan = [this](Touch* touch, Event* event) {
         Vec2 touchLocation = touch->getLocation();
 
-        // ¼ì²â´¥ÃþµãÊÇ·ñÔÚÅÚÌ¨¡¢Éý¼¶°´Å¥»òÒÆ³ý°´Å¥ÉÏ
+        // ï¿½ï¿½â´¥ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½Å¥ï¿½ï¿½
         if (!this->getBoundingBox().containsPoint(touchLocation) &&
             !this->upgradeButton->getBoundingBox().containsPoint(touchLocation) &&
             !this->removeButton->getBoundingBox().containsPoint(touchLocation)) {
-            // µã»÷ÔÚÅÚÌ¨ºÍ°´Å¥Ö®Íâ£¬Òþ²Ø¹¥»÷·¶Î§ºÍ°´Å¥
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½Í°ï¿½Å¥Ö®ï¿½â£¬ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½Í°ï¿½Å¥
             this->hideAttackRangeAndButtons();
             return true;
         }
-        return false; // ÔÊÐíÊÂ¼þ¼ÌÐø´«µÝ
+        return false; // ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(globalListener, this);
 }
 
 void Bottle::hideAttackRangeAndButtons() {
-    // Òþ²Ø¹¥»÷·¶Î§Ö¸Ê¾
+    // ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½Î§Ö¸Ê¾
     if (attackRange) attackRange_->setVisible(false);
 
-    // Òþ²ØÉý¼¶ºÍÒÆ³ý°´Å¥
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½Å¥
     if (upgradeButton) upgradeButton->setVisible(false);
     if (removeButton) removeButton->setVisible(false);
 }
 
 void Bottle::upgrade()
 {
-    // Ôö¼Ó¹¥»÷Á¦¡¢·¶Î§µÈ£¬¸ù¾ÝÓÎÏ·ÐèÇó¶¨ÖÆ
+    // ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (level < 3) {
         level++;
-        // ¸üÐÂÅÚËþµÄÍâ¹ÛºÍÊôÐÔ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ûºï¿½ï¿½ï¿½ï¿½ï¿½
     }
     std::string textureName = "Tower/Bottle/Level" + std::to_string(level) + ".PNG";
     setTexture(textureName);
 
-    // Ìá¸ß¹¥»÷Á¦¡¢¹¥»÷·¶Î§»ò¹¥»÷ËÙ¶È
-     // Ê¾ÀýÔö¼Ó¹¥»÷Á¦
-    // ¿ÉÒÔÌí¼Ó¸ü¶àµÄÕ½¶·Á¦ÌáÉýÂß¼­
+    // ï¿½ï¿½ß¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½ò¹¥»ï¿½ï¿½Ù¶ï¿½
+     // Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
 
 }
+
 
 void Bottle::remove()
 {
@@ -116,18 +117,18 @@ void Bottle::update(float dt, std::vector<Monster*> monsters) {
             cocos2d::Vec2 towerPosition = getPosition();
             cocos2d::Vec2 targetPosition = monstersInRange[0]->getPosition();
 
-            // ¼ÆËãËþÖ¸ÏòÄ¿±êµÄÏòÁ¿
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             cocos2d::Vec2 direction = targetPosition - towerPosition;
-            direction.normalize();  // ½«ÏòÁ¿¹éÒ»»¯Îªµ¥Î»ÏòÁ¿
+            direction.normalize();  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Îªï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
 
-            // ¼ÆËãÐý×ª½Ç¶È
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¶ï¿½
             float angle = CC_RADIANS_TO_DEGREES(atan2f(direction.y, direction.x));
 
             auto rotateAction = cocos2d::RotateBy::create(0.01f, angle);
             this->runAction(rotateAction);
 
 
-            attack(monstersInRange.front()); // ¹¥»÷µÚÒ»¸ö¹ÖÎï
+            attack(monstersInRange.front()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             timeSinceLastAttack = 0;
         }
     }
@@ -138,7 +139,7 @@ bool Bottle::isMonsterInRange(Monster* monster) {
 }
 
 void Bottle::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // ¼ÙÉè monsters ÊÇ³¡¾°ÖÐËùÓÐ¹ÖÎïµÄÁÐ±í
+    // ï¿½ï¿½ï¿½ï¿½ monsters ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
     monstersInRange.clear();
     if (monsters.size())
     {

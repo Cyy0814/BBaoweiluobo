@@ -13,9 +13,9 @@ Shit* Shit::create(const Vec2& position) {
         shit->autorelease();
         shit->setPosition(position);
 
-        shit->attackDamage = 50;     // ÉèÖÃ¹¥»÷ÉËº¦
-        shit->attackRange = 200.0f;  // ÉèÖÃ¹¥»÷·¶Î§
-        shit->attackSpeed = 1000.0f; // ÉèÖÃ¹¥»÷ËÙ¶È
+        shit->attackDamage = 50;     // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ëºï¿½
+        shit->attackRange = 200.0f;  // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½Î§
+        shit->attackSpeed = 1000.0f; // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
         shit->timeSinceLastAttack = 0;
         shits.push_back(shit);
         return shit;
@@ -29,16 +29,16 @@ void Shit::upgrade()
     if (level < 3 && goldCoin->m_value > 120) {
         level++;
 
-        // ¸üĞÂÍâ¹Û
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         std::string textureName = "Tower/Shit/Level" + std::to_string(level) + ".PNG";
         setTexture(textureName);
 
-        // Õ½Á¦ÌáÉı
+        // Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         attackSpeed += 400;
         attackDamage += 50;
         attackRange += 100;
 
-        // ¿ÛÇ®
+        // ï¿½ï¿½Ç®
         goldCoin->earnGold(-120);
     }
 }
@@ -52,17 +52,17 @@ void Shit::remove()
     else
         goldCoin->earnGold(180);
 
-    // É¾³ıÌØĞ§
+    // É¾ï¿½ï¿½ï¿½ï¿½Ğ§
     auto Delete = cocos2d::Sprite::create("Tower/Tower_Delete.PNG");
     Delete->setPosition(this->getPosition());
     this->getParent()->addChild(Delete);
 
-    // ÉèÖÃÒ»¸ö¶¯×÷À´ÒÆ³ıÉ¾³ıÌØĞ§
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ³ÖĞøÊ±¼ä¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ğ§
+    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ô¸ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     Delete->runAction(sequence);
-    /****1/2¸üĞÂ Ö¸ÕëÏòÁ¿ÖÃÁã*****************************/
+    /****1/2ï¿½ï¿½ï¿½ï¿½ Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*****************************/
     for (auto iter = shits.begin(); iter != shits.end();)
     {
         if (this == *iter)
@@ -84,7 +84,7 @@ void Shit::update(float dt, std::vector<Monster*> monsters) {
     if (timeSinceLastAttack >= 1) {
         checkForMonstersInRange(monsters);
         if (!monstersInRange.empty()) {
-            attack(monstersInRange.front()); // ¹¥»÷µÚÒ»¸ö¹ÖÎï
+            attack(monstersInRange.front()); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             timeSinceLastAttack = 0;
         }
     }
@@ -95,7 +95,7 @@ bool Shit::isMonsterInRange(Monster* monster) {
 }
 
 void Shit::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // ¼ÙÉè monsters ÊÇ³¡¾°ÖĞËùÓĞ¹ÖÎïµÄÁĞ±í
+    // ï¿½ï¿½ï¿½ï¿½ monsters ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
     monstersInRange.clear();
     if (monsters.size())
     {
@@ -107,8 +107,16 @@ void Shit::checkForMonstersInRange(std::vector<Monster*> monsters) {
     }
 }
 
+//----------------------------refactored with flyweight----------------------------//
 void Shit::attack(Monster* target) {
-    auto shitbullet = ShitBullet::createWithTarget(target, "Tower/Shit/ID2_43.PNG", attackSpeed, attackDamage);
-    shitbullet->setPosition(getPosition());
-    this->getParent()->addChild(shitbullet);
+    // ä½¿ç”¨äº«å…ƒå·¥å‚è·å–å­å¼¹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Shit/ID2_43.PNG", attackSpeed, attackDamage);
+    
+    // è®¾ç½®ç›®æ ‡å¹¶æ·»åŠ åˆ°åœºæ™¯
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet) {
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(getPosition());
+        this->getParent()->addChild(concreteBullet);
+    }
 }

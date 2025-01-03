@@ -9,9 +9,12 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace cocos2d;
 
-Tower::Tower() : level(1), attackSpeed(1.0f), towerType(0)
+Tower::Tower() : level(1), attackSpeed(1.0f), towerType(0), attackDamage(50)
 {
-    // ³õÊ¼»¯´úÂë
+    // åˆå§‹åŒ–å…¶ä»–æˆå‘˜
+    attackRange_ = nullptr;
+    upgradeButton = nullptr;
+    removeButton = nullptr;
 }
 
 Tower* Tower::create(Vec2 position,int towerType)
@@ -22,7 +25,7 @@ Tower* Tower::create(Vec2 position,int towerType)
         tower->autorelease();
         tower->towerType = towerType;
         tower->setPosition(position);
-        // ¸ù¾İÀàĞÍ³õÊ¼»¯²»Í¬µÄÊôĞÔ
+        // åˆå§‹åŒ–å…¶ä»–æˆå‘˜
         return tower;
     }
     CC_SAFE_DELETE(tower);
@@ -36,24 +39,35 @@ bool Tower::init()
         return false;
     }
 
-    // ³õÊ¼»¯ÅÚÌ¨
+    // åˆå§‹åŒ–å¡”
     return true;
 }
+
+//----------------------------refactored with flyweight----------------------------//
 void Tower::attack()
 {
-    // ÊµÏÖ¹¥»÷Âß¼­
-    // Õâ¿ÉÄÜÉæ¼°µ½´´½¨Ò»¸ö Projectile Àà£¬²¢½«Æä·¢Éäµ½Ä¿±ê
+    // ä½¿ç”¨äº«å…ƒå·¥å‚è·å–é»˜è®¤å­å¼¹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
+    
+    // è®¾ç½®ç›®æ ‡å¹¶æ·»åŠ åˆ°åœºæ™¯
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet && !monstersInRange.empty()) {
+        Monster* target = monstersInRange.front();
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(this->getPosition());
+        this->getParent()->addChild(concreteBullet);
+    }
 }
 
 void Tower::upgrade()
 {
-    // Éı¼¶ÅÚÌ¨£¬Ìá¸ßÊôĞÔ
-    //½«Ô­ÏÈµÄÅÚÌ¨ÒÆ³ı£¬ÖØĞÂÉú³ÉÒ»¸öĞÂÅÚÌ¨
+    // å¡”
+    //åŸå¡”å‡çº§ä¸ºä¸€çº§å¡”
 }
 
 void Tower::remove()
 {
-    // ÒÆ³ıÅÚÌ¨
+    // åˆ é™¤å¡”
     this->removeFromParentAndCleanup(true);
 }
 
@@ -64,9 +78,9 @@ void Tower::showAttackRange() {
 
 }
 void Tower::showUpgradeAndRemoveButtons() {
-    // ´´½¨Éı¼¶°´Å¥
+    // 
     upgradeButton = cocos2d::ui::Button::create("GameScene/Tower/Btn_CanUpLevel.png");
-    upgradeButton->setPosition(Vec2(this->getPosition().x, this->getPosition().y + 85)); // ÉèÖÃÎ»ÖÃ
+    upgradeButton->setPosition(Vec2(this->getPosition().x, this->getPosition().y + 85)); // 
     upgradeButton->addTouchEventListener([this](Ref* sender, cocos2d::ui::Widget::TouchEventType type) {
         if (type == cocos2d::ui::Widget::TouchEventType::ENDED) {
             this->upgrade();
@@ -74,9 +88,9 @@ void Tower::showUpgradeAndRemoveButtons() {
         });
     this->getParent()->addChild(upgradeButton);
 
-    // ´´½¨ÒÆ³ı°´Å¥
+    // 
     removeButton = cocos2d::ui::Button::create("GameScene/Tower/Btn_SellTower.png");
-    removeButton->setPosition(Vec2(this->getPosition().x, this->getPosition().y - 85)); // ÉèÖÃÎ»ÖÃ
+    removeButton->setPosition(Vec2(this->getPosition().x, this->getPosition().y - 85)); // 
     removeButton->addTouchEventListener([this](Ref* sender, cocos2d::ui::Widget::TouchEventType type) {
         if (type == cocos2d::ui::Widget::TouchEventType::ENDED) {
             this->remove();
@@ -84,30 +98,30 @@ void Tower::showUpgradeAndRemoveButtons() {
         });
     this->getParent()->addChild(removeButton);
 
-    // Ìí¼ÓÒ»¸öÈ«¾Ö´¥Ãş¼àÌıÆ÷
+    // ä¸€é”®è§¦å‘
     auto globalListener = EventListenerTouchOneByOne::create();
-    globalListener->setSwallowTouches(false); // ²»ÍÌÊÉ´¥ÃşÊÂ¼ş
+    globalListener->setSwallowTouches(false); // å¿½ç•¥ç‚¹å‡»
     globalListener->onTouchBegan = [this](Touch* touch, Event* event) {
         Vec2 touchLocation = touch->getLocation();
 
-        // ¼ì²â´¥ÃşµãÊÇ·ñÔÚÅÚÌ¨¡¢Éı¼¶°´Å¥»òÒÆ³ı°´Å¥ÉÏ
+        // åˆ¤æ–­æ˜¯å¦ç‚¹å‡»åˆ°å¡”æˆ–æŒ‰é’®
         if (!this->getBoundingBox().containsPoint(touchLocation) &&
             !this->upgradeButton->getBoundingBox().containsPoint(touchLocation) &&
             !this->removeButton->getBoundingBox().containsPoint(touchLocation)) {
-            // µã»÷ÔÚÅÚÌ¨ºÍ°´Å¥Ö®Íâ£¬Òş²Ø¹¥»÷·¶Î§ºÍ°´Å¥
+            // å¡”å’ŒæŒ‰é’®å¤–ï¼Œå…¶ä»–åœ°æ–¹ç‚¹å‡»
             this->hideAttackRangeAndButtons();
             return true;
         }
-        return false; // ÔÊĞíÊÂ¼ş¼ÌĞø´«µİ
+        return false; // æœªç‚¹å‡»
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(globalListener, this);
 }
 
 void Tower::hideAttackRangeAndButtons() {
-    // Òş²Ø¹¥»÷·¶Î§Ö¸Ê¾
-    if (attackRange) attackRange_->setVisible(false);
+    // 
+    if (attackRange_) attackRange_->setVisible(false);
 
-    // Òş²ØÉı¼¶ºÍÒÆ³ı°´Å¥
+    // 
     if (upgradeButton) upgradeButton->setVisible(false);
     if (removeButton) removeButton->setVisible(false);
 }

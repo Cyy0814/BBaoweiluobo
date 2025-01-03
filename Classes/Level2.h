@@ -3,6 +3,7 @@
 #include "Monster.h"
 #include "GameScene.h"
 #include "cocos2d.h"
+#include "WaveManager.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -16,22 +17,19 @@ public:
         int x, y;
     };
 
-    virtual bool init()override;
-    void startNextWave(float dt);
-    void spawnMonsters(int waveIndex);
+    virtual bool init() override;
+    void setupWaves();
     void endGame();
-
-    /*表示波数*/
-    cocos2d::Label* waveLabel; // 用于显示波数的标签
-    int currentWave;           // 当前波数
-    const int totalWaves = 15; // 总波数
-    // 存储路径
-    vector<Vec2> path;
-
     void getPath(GameMap* gamemap);
-
     void update(float dt);
 
+    cocos2d::Label* waveLabel;
+    const int totalWaves = 15;
+    vector<Vec2> path;
+
     CREATE_FUNC(Level2Scene);
+
+private:
+    WaveManager* waveManager;
 };
 #endif
