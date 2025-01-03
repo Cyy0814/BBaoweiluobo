@@ -113,23 +113,6 @@ void Bottle::update(float dt, std::vector<Monster*> monsters) {
     }
 }
 
-bool Bottle::isMonsterInRange(Monster* monster) {
-    return (getPosition().distance(monster->getPosition()) <= attackRange);
-}
-
-void Bottle::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // 假设 monsters 是场景中所有怪物的列表
-    monstersInRange.clear();
-    if (monsters.size())
-    {
-        for (Monster* monster : monsters) {
-            if (isMonsterInRange(monster)) {
-                monstersInRange.push_back(monster);
-            }
-        }
-    }
-}
-
 void Bottle::attack(Monster* target) {
     bullet = Bullet::createWithTarget(target, "Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
     bullet->setPosition(getPosition());

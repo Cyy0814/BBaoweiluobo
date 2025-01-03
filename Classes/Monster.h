@@ -2,36 +2,44 @@
 #define __MONSTER_H__
 
 #include "cocos2d.h"
+#include "MonsterState.h"
+#include "Global.h"
+#include "ui/CocosGUI.h"
 
+// Refactored with State Pattern
 class Monster : public cocos2d::Sprite {
+    friend class MonsterState;
+    friend class WalkState;
+    friend class SlowedState;
+    friend class DeathState;
+
 public:
     static Monster* createWithType(int monsterType);
 
     float speed = 1000;
-    float halfspeed = speed / 2;
     bool dead = false;
 
     void moveOnPath(const std::vector<cocos2d::Vec2>& path);
     void getAttacked(int damage);
+    void handleSlowEffect(int damage);
     void showHitEffect();
+    void showSlowEffect();
+    void hideSlowEffect();
     void dropCoins();
     void removeFromMonstersArray(Monster* monster);
+    void setAnimation(const std::string& name);
+
+    float getMoveSpeed() const { return speed; }
+    void setMoveSpeed(float newSpeed) { speed = newSpeed; }
 
     CC_SYNTHESIZE_READONLY(int, _hitPoints, HitPoints); // 使用 CC_SYNTHESIZE_READONLY 宏来创建 getter 方法
     CC_SYNTHESIZE_READONLY(int, _monsterType, MonsterType);
     CC_SYNTHESIZE_READONLY(cocos2d::Label*, _hpLabel, HPLabel); // 生命值显示
 
-    void takeHalfspeed()
-    {
-        this->speed = halfspeed;
-    }
-    void beSloweddown()
-    {
-        auto bottomSprite = Sprite::create("Tower/Shit/ID2_10.PNG");
-        addChild(bottomSprite);
-        bottomSprite->setPosition(cocos2d::Vec2(40, -bottomSprite->getContentSize().height / 2 + 10));
-    }
-
+    // 状态相关的新增内容
+    void changeState(MonsterState* newState);
+    MonsterState* getCurrentState() const { return currentState; }
+    virtual void update(float dt) override;
 
 protected:
     Monster(int monsterType, int hitPoints);
@@ -40,7 +48,11 @@ protected:
 private:
     bool isAlive = true;
     void updateHPLabel();
-    void die(); // 当怪物死亡时调用
+    void die();
+
+    // 状态相关的新增成员
+    MonsterState* currentState;
+    cocos2d::Sprite* slowEffect = nullptr;
 };
 
 #endif

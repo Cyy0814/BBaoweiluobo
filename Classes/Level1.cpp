@@ -91,7 +91,9 @@ bool Level1Scene::init()
     /* 初始化萝卜 */
     globalCarrot = Carrot::create();
     globalCarrot->setPosition(path[path.size() - 1]);
+    globalCarrotView = CarrotView::create(globalCarrot);
     this->addChild(globalCarrot);
+    this->addChild(globalCarrotView);
 
     /* 创建点击动作 */
     std::vector<Vec2> positions; // 存储可以放置炮台的位置
@@ -162,13 +164,14 @@ void Level1Scene::spawnMonsters(int waveIndex) {
         this->addChild(monster);
         monster->setVisible(false);
         monsters.push_back(monster);
-
+        
         // 设置怪物间的出现时间间隔
         this->scheduleOnce([this, monster](float dt) {
             // 萝卜血量先为0，则游戏结束
             if (globalCarrot->health <= 0) {
                 monster->cleanup();
                 endGame();
+                return;
             }
             // 出现特效
             auto appear = cocos2d::Sprite::create("Monster/appear.PNG");
@@ -176,7 +179,7 @@ void Level1Scene::spawnMonsters(int waveIndex) {
             this->addChild(appear);
 
             // 设置一个动作来移除出现特效
-            auto fadeOut = cocos2d::FadeOut::create(0.5f); // 持续时间可以根据需要调整
+            auto fadeOut = cocos2d::FadeOut::create(0.5f);
             auto removeExplosion = cocos2d::RemoveSelf::create();
             auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
             appear->runAction(sequence);

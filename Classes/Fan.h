@@ -11,10 +11,8 @@ class Fan : public Tower {
 public:
     static Fan* create(const cocos2d::Vec2& position);
 
-    // ¹¥»÷Ïà¹ØÂß¼­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
     void update(float dt, std::vector<Monster*> monsters);
-    bool isMonsterInRange(Monster* monster);
-    void checkForMonstersInRange(std::vector<Monster*> monsters);
     void attack(Monster* target);
 
     void upgrade();

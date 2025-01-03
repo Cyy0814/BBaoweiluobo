@@ -2,7 +2,9 @@
 #include "audio/include/AudioEngine.h"
 #include "WelcomeScene.h"
 #include "Carrot.h"
+#include "CarrotView.h"
 #include "GoldCoin.h"
+#include "GoldCoinView.h"
 #include "Monster.h"
 #include "Bottle.h"
 #include "Fan.h"
@@ -31,9 +33,11 @@ static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(960, 640);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
-Carrot* globalCarrot = nullptr; // È«¾Ö±äÁ¿µÄ¶¨Òå
+Carrot* globalCarrot = nullptr; // È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½
+CarrotView* globalCarrotView = nullptr;
 GoldCoin* goldCoin = nullptr;
-std::vector<Monster*> monsters; // ÓÃÀ´´æ´¢¹ÖÎïµÄÊý×é
+GoldCoinView* goldCoinView = nullptr;
+std::vector<Monster*> monsters; // æ´¢
 std::vector<Fan*> fans;
 std::vector<Bottle*> bottles;
 std::vector<Shit*> shits;
@@ -85,7 +89,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    // ¹Ø±ÕFPSÏÔÊ¾£¨ÉèÖÃfalse£©
+    // ï¿½Ø±ï¿½FPSï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½falseï¿½ï¿½
     director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this

@@ -1,4 +1,3 @@
-#include"cocos2d.h"
 #include "GoldCoin.h"
 
 USING_NS_CC;
@@ -10,41 +9,41 @@ bool GoldCoin::init()
         return false;
     }
 
-    m_value = 0;
-
-    // 创建用于显示金币数量的标签
-    m_label = Label::createWithTTF("", "fonts/arial.ttf", 24);
-    m_label->setPosition(Vec2(120, 607));
-    addChild(m_label);
-
+    m_value = 0;  // 初始金币数量
     return true;
 }
 
-//击败怪物或卖出物品
+// Refactored with Observer Pattern
+void GoldCoin::notifyGoldChanged()
+{
+    notifyObservers("gold_changed", m_value);
+}
+
+void GoldCoin::setValue(int value)
+{
+    if (m_value != value)
+    {
+        m_value = value;
+        notifyGoldChanged();
+    }
+}
+
+void GoldCoin::updateGoldValue(int goldValue)
+{
+    setValue(goldValue);
+}
+
 void GoldCoin::earnGold(int amount)
 {
-    m_value += amount;
-    updateGoldLabel();
+    setValue(m_value + amount);
 }
-//买炮
+
 bool GoldCoin::purchaseTower(int cost)
 {
     if (m_value >= cost)
     {
-        m_value -= cost;
-        updateGoldLabel();
+        setValue(m_value - cost);
         return true;
     }
-
     return false;
-}
-void GoldCoin::updateGoldValue(int goldValue)
-{
-    m_value = goldValue;
-    this->m_label->setString(std::to_string(m_value));
-}
-
-void GoldCoin::updateGoldLabel()
-{
-    this->m_label->setString(std::to_string(m_value));
 }

@@ -2,7 +2,11 @@
 #define __LEVEL2_SCENE_H__
 #include "Monster.h"
 #include "GameScene.h"
-#include "cocos2d.h"
+#include "Monster.h"
+#include "Carrot.h"
+#include "CarrotView.h"
+#include "GoldCoin.h"
+#include "GoldCoinView.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -21,11 +25,11 @@ public:
     void spawnMonsters(int waveIndex);
     void endGame();
 
-    /*±íÊ¾²¨Êý*/
-    cocos2d::Label* waveLabel; // ÓÃÓÚÏÔÊ¾²¨ÊýµÄ±êÇ©
-    int currentWave;           // µ±Ç°²¨Êý
-    const int totalWaves = 15; // ×Ü²¨Êý
-    // ´æ´¢Â·¾¶
+    /*ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½*/
+    cocos2d::Label* waveLabel; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Ç©
+    int currentWave;           // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+    const int totalWaves = 15; // ï¿½Ü²ï¿½ï¿½ï¿½
+    // ï¿½æ´¢Â·ï¿½ï¿½
     vector<Vec2> path;
 
     void getPath(GameMap* gamemap);

@@ -3,24 +3,28 @@
 
 #include "ui/CocosGUI.h"
 #include "Carrot.h"
+#include "CarrotView.h"
 #include "Monster.h"
 #include "GoldCoin.h"
+#include "GoldCoinView.h"
 #include "Fan.h"
 #include "Bottle.h"
 #include "Shit.h"
 
 
-extern Carrot* globalCarrot; // È«¾Ö±äÁ¿µÄÉùÃ÷
-extern GoldCoin* goldCoin; // ½ð±ÒÏµÍ³
+extern Carrot* globalCarrot; // È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+extern GoldCoin* goldCoin; // ï¿½ï¿½ï¿½ÏµÍ³
+extern CarrotView* globalCarrotView;
+extern GoldCoinView* goldCoinView;
 
-extern std::vector<Monster*> monsters; // ÓÃÀ´´æ´¢¹ÖÎïµÄÊý×é
+extern std::vector<Monster*> monsters; // æ´¢
 
-// ´¢´æ½¨ÔìµÄÅÚÌ¨
+// æ½¨Ì¨
 extern std::vector<Fan*> fans;
 extern std::vector<Bottle*> bottles;
 extern std::vector<Shit*> shits;
 
-// ¼ÇÂ¼ÊÇ·ñÍê³É¹Ø¿¨
+// ï¿½ï¿½Â¼ï¿½Ç·ï¿½ï¿½ï¿½É¹Ø¿ï¿½
 extern bool isLevel1Finish;
 extern bool isLevel2Finish;
 

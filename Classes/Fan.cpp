@@ -9,18 +9,18 @@ USING_NS_CC;
 
 Fan* Fan::create(const Vec2& position) {
     Fan* fan = new (std::nothrow) Fan();
-    if (fan && fan->init()) { //  π”√ƒ˙µƒ≈⁄À˛Õº∆¨
+    if (fan && fan->init()) { //  πÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÕº∆¨
         auto base = Sprite::create("Tower/Fan/ID4_0.PNG");
         base->setPosition(fan->getPosition().x + 20, fan->getPosition().y + 10);
         fan->addChild(base, -1);
 
-        fan->setTexture("Tower/Fan/Level1.PNG"); // ≥ı ºÕ‚π€
+        fan->setTexture("Tower/Fan/Level1.PNG"); // ÔøΩÔøΩ ºÔøΩÔøΩÔøΩ
         fan->autorelease();
         fan->setPosition(position.x + 5, position.y + 10);
 
-        fan->attackDamage = 100;    // …Ë÷√π•ª˜…À∫¶
-        fan->attackRange = 200.0f;  // …Ë÷√π•ª˜∑∂Œß
-        fan->attackSpeed = 1000.0f; // …Ë÷√π•ª˜ÀŸ∂»
+        fan->attackDamage = 100;    // ÔøΩÔøΩÔøΩ√πÔøΩÔøΩÔøΩÔøΩÀ∫ÔøΩ
+        fan->attackRange = 200.0f;  // ÔøΩÔøΩÔøΩ√πÔøΩÔøΩÔøΩÔøΩÔøΩŒß
+        fan->attackSpeed = 1000.0f; // ÔøΩÔøΩÔøΩ√πÔøΩÔøΩÔøΩÔøΩŸ∂ÔøΩ
         fan->timeSinceLastAttack = 0;
         fans.push_back(fan);
 
@@ -34,16 +34,16 @@ void Fan::upgrade()
     if (level < 3 && goldCoin->m_value > 120) {
         level++;
 
-        // ∏¸–¬Õ‚π€
+        // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
         std::string textureName = "Tower/Fan/Level" + std::to_string(level) + ".PNG";
         setTexture(textureName);
 
-        // ’Ω¡¶Ã·…˝
+        // ’ΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
         attackSpeed += 400;
         attackDamage += 150;
         attackRange += 100;
 
-        // ø€«Æ
+        // ÔøΩÔøΩ«Æ
         goldCoin->earnGold(-120);
     }
 }
@@ -57,17 +57,17 @@ void Fan::remove()
     else
         goldCoin->earnGold(180);
 
-    // …æ≥˝Ãÿ–ß
+    // …æÔøΩÔøΩÔøΩÔøΩ–ß
     auto Delete = cocos2d::Sprite::create("Tower/Tower_Delete.PNG");
     Delete->setPosition(this->getPosition());
     this->getParent()->addChild(Delete);
 
-    // …Ë÷√“ª∏ˆ∂Ø◊˜¿¥“∆≥˝…æ≥˝Ãÿ–ß
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ≥÷–¯ ±º‰ø…“‘∏˘æ›–Ë“™µ˜’˚
+    // ÔøΩÔøΩÔøΩÔøΩ“ªÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ∆≥ÔøΩ…æÔøΩÔøΩÔøΩÔøΩ–ß
+    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ÔøΩÔøΩÔøΩÔøΩ ±ÔøΩÔøΩÔøΩÔøΩ‘∏ÔøΩÔøΩÔøΩÔøΩÔøΩ“™ÔøΩÔøΩÔøΩÔøΩ
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     Delete->runAction(sequence);
-    /****1/2∏¸–¬ ÷∏’ÎœÚ¡ø÷√¡„*****************************/
+    /****1/2ÔøΩÔøΩÔøΩÔøΩ ÷∏ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ*****************************/
     for (auto iter = fans.begin(); iter != fans.end();)
     {
         if (this == *iter)
@@ -82,35 +82,6 @@ void Fan::remove()
     this->hideAttackRangeAndButtons();
     this->removeAllChildren();
     this->removeFromParentAndCleanup(true);
-}
-
-
-void Fan::update(float dt, std::vector<Monster*> monsters) {
-    timeSinceLastAttack += dt;
-    if (timeSinceLastAttack >= 1) {
-        checkForMonstersInRange(monsters);
-        if (!monstersInRange.empty()) {
-            attack(monstersInRange.front()); // π•ª˜µ⁄“ª∏ˆπ÷ŒÔ
-            timeSinceLastAttack = 0;
-        }
-    }
-}
-
-bool Fan::isMonsterInRange(Monster* monster) {
-    return (getPosition().distance(monster->getPosition()) <= attackRange);
-}
-
-void Fan::checkForMonstersInRange(std::vector<Monster*> monsters) {
-    // ºŸ…Ë monsters  «≥°æ∞÷–À˘”–π÷ŒÔµƒ¡–±Ì
-    monstersInRange.clear();
-    if (monsters.size())
-    {
-        for (Monster*& monster : monsters) {
-            if (isMonsterInRange(monster)) {
-                monstersInRange.push_back(monster);
-            }
-        }
-    }
 }
 
 void Fan::attack(Monster* target) {

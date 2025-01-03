@@ -5,9 +5,9 @@
 using namespace cocos2d;
 USING_NS_CC;
 
+// Refactored with State Pattern
 Monster* Monster::createWithType(int monsterType) {
-    int hitPoints = 100; // Ä¬ÈÏÉúÃüÖµ£¬¸ù¾İ¹ÖÎïÀàĞÍ¿ÉÒÔ²»Í¬
-    // ¸ù¾İ¹ÖÎïÀàĞÍÉèÖÃ²»Í¬µÄÉúÃüÖµ
+    int hitPoints = 100;
     switch (monsterType) {
         case 1:
             hitPoints = 150;
@@ -32,7 +32,7 @@ Monster* Monster::createWithType(int monsterType) {
 }
 
 Monster::Monster(int monsterType, int hitPoints)
-    : _monsterType(monsterType), _hitPoints(hitPoints) {
+    : _monsterType(monsterType), _hitPoints(hitPoints), currentState(nullptr) {
 }
 
 bool Monster::init() {
@@ -40,79 +40,107 @@ bool Monster::init() {
         return false;
     }
 
-    // ¸ù¾İÀàĞÍ³õÊ¼»¯¹ÖÎïµÄÍâ¹Û
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     std::string filename = "Monster/monster" + std::to_string(_monsterType) + ".png";
     this->initWithFile(filename);
 
-    // ´´½¨ÏÔÊ¾ÉúÃüÖµµÄ±êÇ©
-    //_hpLabel = Label::createWithSystemFont(std::to_string(_hitPoints), "Arial", 12);
-    //_hpLabel->setPosition(Vec2(this->getContentSize() / 2));
-    //this->addChild(_hpLabel);
+    // åˆå§‹åŒ–ä¸ºè¡Œèµ°çŠ¶æ€
+    currentState = new WalkState();
+    currentState->enter(this);
+
+    // å¯ç”¨update
+    scheduleUpdate();
 
     return true;
+}
+
+// çŠ¶æ€ç›¸å…³çš„æ–°å¢æ–¹æ³•
+void Monster::changeState(MonsterState* newState) {
+    if (currentState) {
+        currentState->exit(this);
+        delete currentState;
+    }
+    currentState = newState;
+    if (currentState) {
+        currentState->enter(this);
+    }
+}
+
+void Monster::update(float dt) {
+    if (currentState) {
+        currentState->update(this, dt);
+    }
 }
 
 void Monster::moveOnPath(const std::vector<cocos2d::Vec2>& path) {
     if (path.empty()) return;
 
-    // ´´½¨¶¯×÷ĞòÁĞ
     Vector<FiniteTimeAction*> actions;
 
     for (size_t i = 1; i < path.size(); ++i) {
-        // Ã¿¶ÎÂ·¾¶ÒÆ¶¯ËùĞèµÄÊ±¼ä£¬Äú¿ÉÒÔ¸ù¾İ¹ÖÎïµÄËÙ¶È½øĞĞµ÷Õû
         float moveDuration = path[i].length() / speed;
-
-        // ´´½¨ÒÆ¶¯µ½ÏÂÒ»¸öµãµÄ¶¯×÷
         auto moveAction = MoveTo::create(moveDuration, path[i]);
         actions.pushBack(moveAction);
     }
-    // Ìí¼ÓÒ»¸ö»Øµ÷º¯Êı£¬µ±ÒÆ¶¯Íê³ÉÊ±µ÷ÓÃ
-    auto callbackAction = cocos2d::CallFunc::create([this]() {
-
+    auto callbackAction = CallFunc::create([this]() {
         if (this->_hitPoints > 0)
-            globalCarrot->decreaseHealth();// ¼õÉÙÂÜ²·µÄÑªÁ¿
+            globalCarrot->decreaseHealth();
         removeFromMonstersArray(this);
-        this->removeFromParent(); // ÒÆ³ı¹ÖÎï
-        // »¹¿ÉÒÔÔÚÕâÀïÌí¼ÓÆäËû´úÂë£¬ÀıÈç¸üĞÂÓÎÏ·×´Ì¬
-        });
+        this->removeFromParent();
+    });
     actions.pushBack(callbackAction);
 
-    // ´´½¨ĞòÁĞ¶¯×÷
     auto sequence = Sequence::create(actions);
-
-    // ÔËĞĞ¶¯×÷
     runAction(sequence);
 }
 
 void Monster::getAttacked(int damage) {
-    //updateHPLabel();
-    if (!isAlive) return; // Èç¹û¹ÖÎïÒÑ¾­ËÀÍö£¬Ö±½Ó·µ»Ø
+    if (!isAlive) return;
 
-    _hitPoints -= damage;
-
-    if (_hitPoints <= 0) {
-        _hitPoints = 0;
-        die();
-    }
-    else {
-        showHitEffect();
+    if (currentState) {
+        currentState->handleDamage(this, damage);
+    } else {
+        // åŸæœ‰çš„ä¼¤å®³å¤„ç†é€»è¾‘ä½œä¸ºåå¤‡
+        _hitPoints -= damage;
+        if (_hitPoints <= 0) {
+            _hitPoints = 0;
+            die();
+        } else {
+            showHitEffect();
+        }
     }
 }
 
 void Monster::showHitEffect() {
-    // ÊµÏÖ±»¹¥»÷µÄÌØĞ§£¬ÈçÉÁË¸»òºìÉ«µş¼Ó
+    // TODO: å®ç°å—å‡»ç‰¹æ•ˆ
+}
+
+void Monster::setAnimation(const std::string& name) {
+    // TODO: å®ç°åŠ¨ç”»åˆ‡æ¢é€»è¾‘
+    // è¿™é‡Œéœ€è¦æ ¹æ®å…·ä½“çš„åŠ¨ç”»ç³»ç»Ÿæ¥å®ç°
+}
+
+void Monster::showSlowEffect() {
+    if (!slowEffect) {
+        slowEffect = Sprite::create("Tower/Shit/ID2_10.PNG");
+        if (slowEffect) {
+            addChild(slowEffect);
+            slowEffect->setPosition(Vec2(40, -slowEffect->getContentSize().height / 2 + 10));
+        }
+    }
+    slowEffect->setVisible(true);
+}
+
+void Monster::hideSlowEffect() {
+    if (slowEffect) {
+        slowEffect->setVisible(false);
+    }
 }
 
 void Monster::dropCoins() {
-    // µôÂä30½ğ±Ò
+    // æ‰è½30é‡‘å¸
     goldCoin->earnGold(30);
 }
-
-/*
-void Monster::updateHPLabel() {
-    _hpLabel->setString(std::to_string(_hitPoints));
-}
-*/
 
 void Monster::removeFromMonstersArray(Monster* monster)
 {
@@ -124,13 +152,13 @@ void Monster::removeFromMonstersArray(Monster* monster)
 }
 
 void Monster::die() {
-    // ±¬Õ¨ÌØĞ§
+    // çˆ†ç‚¸ç‰¹æ•ˆ
     auto explosion = cocos2d::Sprite::create("Monster/explosion.PNG");
     explosion->setPosition(this->getPosition());
     this->getParent()->addChild(explosion);
 
-    // ÉèÖÃÒ»¸ö¶¯×÷À´ÒÆ³ı±¬Õ¨ÌØĞ§
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ³ÖĞøÊ±¼ä¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+    // è®¾ç½®ä¸€ä¸ªåŠ¨ä½œæ¥ç§»é™¤çˆ†ç‚¸ç‰¹æ•ˆ
+    auto fadeOut = cocos2d::FadeOut::create(0.5f);
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     explosion->runAction(sequence);
@@ -138,5 +166,26 @@ void Monster::die() {
     dropCoins();
     removeFromMonstersArray(this);
     this->setVisible(false);
-    //this->removeFromParent();
+}
+
+// æ–°å¢ï¼šå¤„ç†å‡é€Ÿæ•ˆæœ
+void Monster::handleSlowEffect(int damage) {
+    if (!isAlive) return;
+
+    // å¤„ç†ä¼¤å®³
+    if (currentState) {
+        currentState->handleDamage(this, damage);
+    } else {
+        _hitPoints -= damage;
+        if (_hitPoints <= 0) {
+            _hitPoints = 0;
+            die();
+            return;
+        }
+    }
+
+    // å¦‚æœå½“å‰ä¸æ˜¯å‡é€ŸçŠ¶æ€ï¼Œåˆ™åˆ‡æ¢åˆ°å‡é€ŸçŠ¶æ€
+    if (!dynamic_cast<SlowedState*>(currentState)) {
+        changeState(new SlowedState());
+    }
 }

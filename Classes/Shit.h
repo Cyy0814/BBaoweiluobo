@@ -14,10 +14,8 @@ public:
     void upgrade();
     void remove() override;
 
-    // ¹¥»÷Ïà¹ØÂß¼­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
     void update(float dt, std::vector<Monster*> monsters);
-    bool isMonsterInRange(Monster* monster);
-    void checkForMonstersInRange(std::vector<Monster*> monsters);
     void attack(Monster* target);
 
 private:

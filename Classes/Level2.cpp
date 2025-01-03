@@ -26,30 +26,30 @@ Scene* Level2Scene::createScene()
 
 bool Level2Scene::init()
 {
-    /* ³õÊ¼»¯³¡¾° */
+    /* ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     if (!Scene::init())
     {
         return false;
     }
 
-    /* »ñÈ¡ÆÁÄ»´óĞ¡ */
+    /* ï¿½ï¿½È¡ï¿½ï¿½Ä»ï¿½ï¿½Ğ¡ */
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /* ÉèÖÃ±³¾° */
+    /* ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ */
     auto bg = Sprite::create("Level/Level2_bg.png");
     bg->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(bg);
 
-    /* ÉèÖÃÓÎÏ·»­Ãæ */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ */
     auto gamescene = GameScene::create();
     this->addChild(gamescene);
 
-    /* ´òÓ¡·ÅÖÃÅÚÌ¨µÄÎ»ÖÃ */
+    /* ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Î»ï¿½ï¿½ */
     auto gamemap = GameMap::create();
     this->addChild(gamemap);
 
-    /* ³õÊ¼»¯Íø¸ñÂ·¾¶ */
+    /* ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ */
     vector<GameMap::Grid>path_ = {
     { 4,5 },
     { 5,5 },
@@ -78,14 +78,14 @@ bool Level2Scene::init()
         gamemap->addPathPoint(path_[i]);
     }
 
-    /* ³õÊ¼»¯ÏñËØÂ·¾¶ºÍ²¨´Î */
+    /* ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ */
     currentWave = 0;
     getPath(gamemap);
 
-    /* µ¹¼ÆÊ±ºó½øĞĞÉèÖÃ */
+    /* ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     auto delay = DelayTime::create(3.0f);
     auto createCarrot = CallFunc::create([this]() {
-        /* ÉèÖÃÆğµã */
+        /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
         auto startPoint = Sprite::create("Level/startPoint.PNG");
         startPoint->setPosition(path[0]);
         this->addChild(startPoint);
@@ -93,36 +93,39 @@ bool Level2Scene::init()
     auto sequence = Sequence::create(delay, createCarrot, nullptr);
     runAction(sequence);
 
-    /* ³õÊ¼»¯ÂÜ²· */
+
+    /* åˆå§‹åŒ–èåœ */
     globalCarrot = Carrot::create();
     globalCarrot->setPosition(path[path.size() - 1]);
+    globalCarrotView = CarrotView::create(globalCarrot);
     this->addChild(globalCarrot);
+    this->addChild(globalCarrotView);
 
-    /* ´´½¨µã»÷¶¯×÷ */
-    std::vector<Vec2> positions; // ´æ´¢¿ÉÒÔ·ÅÖÃÅÚÌ¨µÄÎ»ÖÃ
+    /*  */
+    std::vector<Vec2> positions; // æ´¢Ô·Ì¨Î»
     for (int y = 0; y < gamemap->GRID_HEIGHT - 1; ++y) {
         for (int x = 0; x < gamemap->GRID_WIDTH; ++x) {
             if (gamemap->gridMap[y][x]) {
-                // ½«Î»ÖÃÌí¼Óµ½ positions ÏòÁ¿
+                // ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ positions ï¿½ï¿½ï¿½ï¿½
                 positions.push_back(gamemap->gridToPixel(x, y));
             }
         }
     }
-    // ´´½¨²¢³õÊ¼»¯ PickTower
+    // åˆ›å»ºå¹¶åˆå§‹åŒ– PickTower
     auto pickTower = PickTower::createWithPositions(positions);
     this->addChild(pickTower);
 
-    /* ³õÊ¼»¯²¨ÊıÏÔÊ¾±êÇ© */
+    /* åˆå§‹åŒ–æ³¢æ•°æ˜¾ç¤ºæ ‡ç­¾ */
     currentWave = 0;
     waveLabel = Label::createWithTTF(std::to_string(currentWave) + "  " + std::to_string(totalWaves), "fonts/arial.ttf", 28);
     waveLabel->setPosition(Vec2(visibleSize.width / 2 - 75, visibleSize.height - 35));
-    waveLabel->setColor(Color3B::WHITE); // ÉèÖÃÑÕÉ«Îª°×É«
+    waveLabel->setColor(Color3B::WHITE); // è®¾ç½®é¢œè‰²ä¸ºç™½è‰²
     this->addChild(waveLabel);
 
-    /* µ¹¼ÆÊ±¶¯»­ */
+    /* å€’è®¡æ—¶åŠ¨ç”» */
     gamescene->createCountdownAnimation();
 
-    /* ¿ªÊ¼µÚÒ»²¨ */
+    /* å¼€å§‹ç¬¬ä¸€æ³¢ */
     this->schedule(CC_SCHEDULE_SELECTOR(Level2Scene::startNextWave), 6.0f);
 
     this->scheduleUpdate();
@@ -131,7 +134,7 @@ bool Level2Scene::init()
 
 void Level2Scene::getPath(GameMap* gamemap)
 {
-    // ¼ÆËãÂ·¾¶µÄÏñËØ×ø±ê
+    // ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     for (const auto& grid : gamemap->path)
     {
         path.push_back(gamemap->gridToPixel(grid.x, grid.y));
@@ -140,48 +143,48 @@ void Level2Scene::getPath(GameMap* gamemap)
 
 void Level2Scene::startNextWave(float dt) {
     if (currentWave >= totalWaves) {
-        // ËùÓĞ²¨´ÎÍê³É£¬ÓÎÏ·½áÊø
+        // ï¿½ï¿½ï¿½Ğ²ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
         unschedule(CC_SCHEDULE_SELECTOR(Level2Scene::startNextWave));
         isLevel2Finish = true;
         endGame();
         return;
     }
 
-    // ¿ªÊ¼ÏÂÒ»²¨¹ÖÎïµÄÉú³É
+    // ï¿½ï¿½Ê¼ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     spawnMonsters(currentWave);
 
-    // ×¼±¸ÏÂÒ»²¨
+    // ×¼ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
     currentWave++;
     waveLabel->setString(std::to_string(currentWave) + "  " + std::to_string(totalWaves));
 }
 
 void Level2Scene::spawnMonsters(int waveIndex) {
-    // ¸ù¾İ²¨´Î¾ö¶¨Éú³É¹ÖÎïµÄÀàĞÍºÍÊıÁ¿
-    int monsterType = (waveIndex % 3) + 1; // ¾ÙÀı£ºÃ¿²¨ÇĞ»»Ò»ÖÖ¹ÖÎïÀàĞÍ
-    int monsterCount = 4 + (waveIndex % 3); // ¾ÙÀı£ºÃ¿²¨¹ÖÎïÊıÁ¿ÔÚ5µ½7Ö®¼ä
+    // ï¿½ï¿½ï¿½İ²ï¿½ï¿½Î¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½ï¿½ï¿½ï¿½
+    int monsterType = (waveIndex % 3) + 1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Ğ»ï¿½Ò»ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    int monsterCount = 4 + (waveIndex % 3); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½7Ö®ï¿½ï¿½
 
     for (int i = 0; i < monsterCount; ++i) {
-        // ´´½¨¹ÖÎï²¢ÉèÖÃÎ»ÖÃµ½Â·¾¶Æğµã
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï²¢ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½
         auto monster = Monster::createWithType(monsterType);
-        monster->setPosition(path.front()); // ¼ÙÉèÂ·¾¶µÄµÚÒ»¸öµãÊÇÆğµã
+        monster->setPosition(path.front()); // ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½Äµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         this->addChild(monster);
         monster->setVisible(false);
         monsters.push_back(monster);
 
-        // ÉèÖÃ¹ÖÎï¼äµÄ³öÏÖÊ±¼ä¼ä¸ô
+        // ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
         this->scheduleOnce([this, monster](float dt) {
-            // ÂÜ²·ÑªÁ¿ÏÈÎª0£¬ÔòÓÎÏ·½áÊø
+            // ï¿½Ü²ï¿½Ñªï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½
             if (globalCarrot->health <= 0) {
                 monster->cleanup();
                 endGame();
             }
-            // ³öÏÖÌØĞ§
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§
             auto appear = cocos2d::Sprite::create("Monster/appear.PNG");
             appear->setPosition(path.front());
             this->addChild(appear);
 
-            // ÉèÖÃÒ»¸ö¶¯×÷À´ÒÆ³ı³öÏÖÌØĞ§
-            auto fadeOut = cocos2d::FadeOut::create(0.5f); // ³ÖĞøÊ±¼ä¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+            // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ§
+            auto fadeOut = cocos2d::FadeOut::create(0.5f); // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ô¸ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
             auto removeExplosion = cocos2d::RemoveSelf::create();
             auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
             appear->runAction(sequence);
@@ -189,20 +192,20 @@ void Level2Scene::spawnMonsters(int waveIndex) {
             monster->setVisible(true);
             monster->moveOnPath(this->path);
 
-            }, i * 1.0f, "spawn_monster_" + std::to_string(i)); // Ã¿¸ô1.0Ãë³öÏÖÒ»Ö»¹ÖÎï
+            }, i * 1.0f, "spawn_monster_" + std::to_string(i)); // Ã¿ï¿½ï¿½1.0ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ö»ï¿½ï¿½ï¿½ï¿½
     }
 }
 
 void Level2Scene::endGame() {
-    // ´¦ÀíÓÎÏ·½áÊøÂß¼­
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
 
-    /* ³öÏÖ»ñÊ¤ÌáÊ¾¿ò */
-    // ÃÉ°æ²ã
+    /* ï¿½ï¿½ï¿½Ö»ï¿½Ê¤ï¿½ï¿½Ê¾ï¿½ï¿½ */
+    // ï¿½É°ï¿½ï¿½
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 150));
     this->addChild(maskLayer, 6);
 
-    // ´´½¨ÌáÊ¾¿ò
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½
     ImageView* tips;
     if (globalCarrot->health <= 0) {
         tips = ImageView::create("GameScene/lose.png");
@@ -214,8 +217,8 @@ void Level2Scene::endGame() {
     tips->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     maskLayer->addChild(tips, 2);
 
-    // ÒÔÏÂ°´Å¥¶¼Ìí¼ÓÔÚ tips ²ãÉÏ 
-    // ÔÙÊÔÒ»´Î°´Å¥
+    // ï¿½ï¿½ï¿½Â°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ tips ï¿½ï¿½ï¿½ï¿½ 
+    // ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î°ï¿½Å¥
     auto restartButton = ui::Button::create("GameScene/again_normal.png", "GameScene/again_selected.png");
     restartButton->setPosition(Vec2(210, 185));
     tips->addChild(restartButton);
@@ -223,21 +226,21 @@ void Level2Scene::endGame() {
         Director::getInstance()->resume();
         Director::getInstance()->getScheduler()->setTimeScale(1);
 
-        // ÖØĞÂ¿ªÊ¼ÓÎÏ·
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // ï¿½ï¿½ï¿½Â¿ï¿½Ê¼ï¿½ï¿½Ï·
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö²ï¿½
         this->addChild(maskLayer);
-        float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+        float targetY = visibleSize.height; // Ä¿ï¿½ï¿½Î»ï¿½Ãµï¿½Yï¿½ï¿½ï¿½ï¿½
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, Level2Scene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, Level2Scene::create(), Color3B::BLACK)); // ï¿½Ğ»ï¿½ï¿½ï¿½ï¿½Â³ï¿½ï¿½ï¿½
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);
         });
 
-    // Ñ¡Ôñ¹Ø¿¨°´Å¥
+    // Ñ¡ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½Å¥
     auto returnButton = ui::Button::create("GameScene/return_normal.png", "GameScene/return_selected.png");
     returnButton->setPosition(Vec2(210, 90));
     tips->addChild(returnButton);
@@ -245,38 +248,38 @@ void Level2Scene::endGame() {
         Director::getInstance()->resume();
         Director::getInstance()->getScheduler()->setTimeScale(1);
 
-        // ·µ»ØÑ¡Ôñ½çÃæ
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö²ï¿½
         this->addChild(maskLayer);
-        float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+        float targetY = visibleSize.height; // Ä¿ï¿½ï¿½Î»ï¿½Ãµï¿½Yï¿½ï¿½ï¿½ï¿½
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::create(), Color3B::BLACK)); // ï¿½Ğ»ï¿½ï¿½ï¿½ï¿½Â³ï¿½ï¿½ï¿½
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);
         });
 
-    /* ÓÎÏ·ÔİÍ£Âß¼­ */
-    // ÓÎÏ·ÔİÍ£
+    /* ï¿½ï¿½Ï·ï¿½ï¿½Í£ï¿½ß¼ï¿½ */
+    // ï¿½ï¿½Ï·ï¿½ï¿½Í£
     Director::getInstance()->pause();
 
-    // È·±£ÓÃ»§²»ÄÜµã»÷ÔİÍ£²Ëµ¥ºóÃæµÄÔªËØ£¬¿ÉÒÔÍ¨¹ıÌí¼ÓÒ»¸ö¼àÌıÆ÷µ½ÔİÍ£²Ëµ¥²ãÀ´ÍÌÊÉËùÓĞµã»÷ÊÂ¼ş
+    // È·ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½Í£ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½Ø£ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½Â¼ï¿½
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     listener->onTouchBegan = [](cocos2d::Touch* touch, cocos2d::Event* event) {
-        return true; // ÍÌÊÉ´¥ÃşÊÂ¼ş
+        return true; // ï¿½ï¿½ï¿½É´ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
     };
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, maskLayer);
 
-    /* ÈÃÂÜ²·µÄÖ¸Õë¹éÁã */
+    /* ï¿½ï¿½ï¿½Ü²ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ */
     globalCarrot = nullptr;
 }
 
 void Level2Scene::update(float dt) {
-    // ¸üĞÂ³¡¾°ÖĞµÄËùÓĞÅÚËş
+    // ï¿½ï¿½ï¿½Â³ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if (monsters.size())
     {
         for (auto bottle : bottles) {
