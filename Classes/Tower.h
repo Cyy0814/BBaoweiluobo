@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Monster.h"
 #include "ui/CocosGUI.h"
+#include "IAttackStrategy.h"
 using namespace cocos2d;
 using namespace cocos2d::ui;
 
@@ -11,28 +12,42 @@ class Tower : public cocos2d::Sprite
 {
 public:
     Tower();
-    /*virtual ~Tower();//ÔÚspriteÀàÖÐÒÑ¾­ÓÐÎö¹¹º¯ÊýÁË*/
+    /*virtual ~Tower();//ï¿½ï¿½spriteï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
-    static Tower* create(Vec2 position,int towerType);//´´½¨Ò»¸öËþ£¬ÔÚÖ¸¶¨Î»ÖÃ¼ÓÔØÍ¼Æ¬
+    static Tower* create(Vec2 position,int towerType);//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Î»ï¿½Ã¼ï¿½ï¿½ï¿½Í¼Æ¬
 
-    virtual bool init() override;//ÅÐ¶Ï³õÊ¼»¯ÊÇ·ñ³É¹¦
-    virtual void attack();//¹¥»÷£¬ÊµÀý»¯Ò»¸öbullet£¬Ñ°Â·£¬µ½¹ÖÎïÉíÉÏÏûÊ§£¬ÔÙ´ÎÉú³É¡£Ãé×¼Ê±Òª¸Ä±ä½Ç¶È
-    virtual void upgrade() ;//Éý¼¶£¬¸÷ÏîÊôÐÔµÄÉý¼¶£¬¸Ä±äÍ¼Æ¬
-    virtual void remove() ;//ÒÆ³ý
-    void showAttackRange(); // ÏÔÊ¾¹¥»÷·¶Î§
-    void showUpgradeAndRemoveButtons(); // ÏÔÊ¾Éý¼¶ºÍÒÆ³ý°´Å¥
+    virtual bool init() override;//ï¿½Ð¶Ï³ï¿½Ê¼ï¿½ï¿½ï¿½Ç·ï¿½É¹ï¿½
+    virtual void attack();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½bulletï¿½ï¿½Ñ°Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½É¡ï¿½ï¿½ï¿½×¼Ê±Òªï¿½Ä±ï¿½Ç¶ï¿½
+    virtual void upgrade() ;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Í¼Æ¬
+    virtual void remove() ;//ï¿½Æ³ï¿½
+    void showAttackRange(); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§
+    void showUpgradeAndRemoveButtons(); // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½Å¥
     void hideAttackRangeAndButtons();
+    /**
+     * @brief è®¾ç½®æ”»å‡»ç­–ç•¥
+     * @param strategy å…·ä½“çš„æ”»å‡»ç­–ç•¥å®žçŽ°
+     */
+    void setAttackStrategy(IAttackStrategy* strategy) {
+        attackStrategy = strategy;
+    }
+    virtual ~Tower() {
+        if(attackStrategy) {
+            delete attackStrategy;
+            attackStrategy = nullptr;
+        }
+    }
 protected:
-    int level; // µÈ¼¶
+    int level; // È¼
     int towerType;
-    std::vector<Monster*> monstersInRange; // ÔÚ·¶Î§ÄÚµÄ¹ÖÎïÊý×é
-    int attackDamage; // ¹¥»÷ÉËº¦
-    float attackRange; //¹¥»÷·¶Î§
-    float attackSpeed; // ¹¥»÷ËÙ¶È
+    std::vector<Monster*> monstersInRange; // Ú·Î§ÚµÄ¹
+    int attackDamage; // Ëº
+    float attackRange; //Î§
+    float attackSpeed; // Ù¶
     float timeSinceLastAttack;
 
-    cocos2d::ui::Button* upgradeButton; // Éý¼¶°´Å¥
-    cocos2d::ui::Button* removeButton;  // ÒÆ³ý°´Å¥
+    cocos2d::ui::Button* upgradeButton; // Å¥
+    cocos2d::ui::Button* removeButton;  // Æ³Å¥
     Sprite* attackRange_;
+    IAttackStrategy* attackStrategy;
 };
 #endif
