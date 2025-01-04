@@ -1,37 +1,19 @@
 #ifndef __LEVEL2_SCENE_H__
 #define __LEVEL2_SCENE_H__
-#include "Monster.h"
-#include "GameScene.h"
-#include "cocos2d.h"
 
-using namespace cocos2d;
-using namespace std;
+#include "BaseLevelScene.h"
 
-class Level2Scene : public Scene
-{
+class Level2Scene : public BaseLevelScene {
 public:
     static Scene* createScene();
-
-    struct Grid {
-        int x, y;
-    };
-
-    virtual bool init()override;
-    void startNextWave(float dt);
-    void spawnMonsters(int waveIndex);
-    void endGame();
-
-    /*±íÊ¾²¨Êý*/
-    cocos2d::Label* waveLabel; // ÓÃÓÚÏÔÊ¾²¨ÊýµÄ±êÇ©
-    int currentWave;           // µ±Ç°²¨Êý
-    const int totalWaves = 15; // ×Ü²¨Êý
-    // ´æ´¢Â·¾¶
-    vector<Vec2> path;
-
-    void getPath(GameMap* gamemap);
-
-    void update(float dt);
+    virtual bool init() override;
+    
+    // å®žçŽ°åŸºç±»çš„çº¯è™šå‡½æ•°
+    virtual void initPath(GameMap* gameMap) override;
+    virtual const char* getBgImagePath() override { return "Level/Level2_bg.png"; }
+    virtual int getTotalWaves() override { return 15; }
 
     CREATE_FUNC(Level2Scene);
 };
+
 #endif
