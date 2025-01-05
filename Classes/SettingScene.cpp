@@ -13,41 +13,41 @@ Scene* SettingScene::createScene()
 
 bool SettingScene::init()
 {
-    /* ³õÊ¼»¯³¡¾° */
+    /* åˆå§‹åŒ–åœºæ™¯ */
     if (!Scene::init())
     {
         return false;
     }
 
-    /* »ñÈ¡ÆÁÄ»´óÐ¡ */
+    /* èŽ·å–å±å¹•å¤§å° */
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // ÉèÖÃ±³¾°
+    // è®¾ç½®èƒŒæ™¯
     auto sprite = Sprite::create("SettingScene/SettingBG1.png");
     sprite->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(sprite, 0);
 
-    /* ´´½¨±êÇ© */
+    /* è®¾ç½®æ ‡ç­¾ */
     auto to_be_continue = Label::createWithTTF("To be continue...", "fonts/arial.ttf", 30);
     to_be_continue->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 50));
     this->addChild(to_be_continue);
 
-    /* ·µ»ØÖ÷½çÃæ°´Å¥ */
+    /* è¿”å›žä¸»èœå•æŒ‰é’® */
     auto backToWelcome = ui::Button::create("SettingScene/Btn_Return.PNG", "SettingScene/Btn_ReturnLight.PNG");
-    backToWelcome->setPosition(Vec2(60, 580)); // ÉèÖÃ°´Å¥µÄ³õÊ¼Î»ÖÃ
-    // °´Å¥µã»÷ÊÂ¼þ´¦ÀíÂß¼­
+    backToWelcome->setPosition(Vec2(60, 580)); // æŒ‰é’®åˆå§‹ä½ç½®
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     backToWelcome->addClickEventListener([=](Ref*) {
-        // ´´½¨ÕÚÕÖ²ã
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // åˆ›å»ºé®ç½©å±‚
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // é®ç½©å±‚
         this->addChild(maskLayer);
 
-        float duration = 0.1f; // ¶¯»­µÄ³ÖÐøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // åŠ¨ç”»çš„æŒç»­æ—¶é—´
+        float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®çš„Yåæ ‡
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, WelcomeScene::create(), Color3B::BLACK)); // ÇÐ»»µ½ÐÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, WelcomeScene::create(), Color3B::BLACK)); // åˆ‡æ¢åˆ°æ–°åœºæ™¯
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);

@@ -15,16 +15,16 @@ Scene* WelcomeScene::createScene()
     return WelcomeScene::create();
 }
 
-// Ìí¼Ó²Ëµ¥¾²Ì¬Í¼ĞÎ
+// æ·»åŠ èœå•é™æ€å›¾æ ‡
 void WelcomeScene::setMenu(char picture[], Vec2 position)
 {
-    // Ìí¼Ó½çÃæ
+    // åˆ›å»ºç²¾çµ
     auto sprite = Sprite::create(picture);
 
-    // ½« Sprite ·ÅÖÃÔÚ position Î»ÖÃ
+    // è®¾ç½®ç²¾çµçš„ä½ç½®
     sprite->setPosition(position);
       
-    // ½« Sprite ×÷Îª×ÓÏîÌí¼Óµ½´Ë²ã
+    // è®¾ç½®ç²¾çµä¸ºåœºæ™¯çš„å­èŠ‚ç‚¹
     if (picture == "WelcomeScene/lock.PNG")
         this->addChild(sprite, 1);
     else
@@ -32,28 +32,28 @@ void WelcomeScene::setMenu(char picture[], Vec2 position)
 }
 
 
-// ³õÊ¼»¯»¶Ó­½çÃæ
+// åˆå§‹åŒ–æ¬¢è¿åœºæ™¯
 bool WelcomeScene::init()
 {
-    /* ³õÊ¼»¯³¡¾° */
+    /* åˆå§‹åŒ–åœºæ™¯ */
     if ( !Scene::init() )
     {
         return false;
     }
 
-    /* »ñÈ¡ÆÁÄ»´óĞ¡ */
+    /* è·å–å±å¹•å¤§å° */
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /* ±³¾°ÌùÍ¼ */
+    /* åŠ è½½èƒŒæ™¯ */
     setMenu("WelcomeScene/MainBG.PNG", Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
-    /* Æ¯¸¡µÄÔÆ */
+    /* é£˜åŠ¨çš„äº‘ */
     auto cloud = Sprite::create("WelcomeScene/Cloud.PNG");
-    cloud->setOpacity(140); // ÉèÖÃÔÆµÄÍ¸Ã÷¶È
-    cloud->setPosition(Vec2(-cloud->getContentSize().width, 550)); // ÉèÖÃÔÆµÄ³õÊ¼Î»ÖÃ
+    cloud->setOpacity(140); // è®¾ç½®äº‘çš„é€æ˜åº¦
+    cloud->setPosition(Vec2(-cloud->getContentSize().width, 550)); // è®¾ç½®äº‘çš„åˆå§‹ä½ç½®
     this->addChild(cloud, 0);
-    // ÊµÏÖºá´©ÆÁÄ»
+    // å®ç°æ¨ªç©¿å±å¹•
     auto move = MoveTo::create(5.0f, Vec2(visibleSize.width + 100, cloud->getPositionY()));
     auto resetPosition = CallFunc::create([=]() {
         cloud->setPosition(Vec2(-cloud->getContentSize().width, cloud->getPositionY()));
@@ -62,65 +62,65 @@ bool WelcomeScene::init()
     auto repeat = RepeatForever::create(sequence);
     cloud->runAction(repeat);
 
-    setMenu("WelcomeScene/Leaf1.PNG", Vec2(410, 470));//  ÂÜ²·Ò¶×Ó1
-    setMenu("WelcomeScene/Leaf2.PNG", Vec2(540, 470));//  ÂÜ²·Ò¶×Ó2
-    setMenu("WelcomeScene/Leaf3.PNG", Vec2(480, 505));//  ÂÜ²·Ò¶×Ó3
-    setMenu("WelcomeScene/CarrotBody.PNG", Vec2(visibleSize.width / 2, visibleSize.height * 0.6)); // ÖĞĞÄÂÜ²·
-    setMenu("WelcomeScene/MainTitle.PNG", Vec2(visibleSize.width / 2 + 30, visibleSize.height / 2 - 30));// ¡°±£ÎÀÂÜ²·¡±×ÖÑù
+    setMenu("WelcomeScene/Leaf1.PNG", Vec2(410, 470));//  Ò¶1
+    setMenu("WelcomeScene/Leaf2.PNG", Vec2(540, 470));//  Ò¶2
+    setMenu("WelcomeScene/Leaf3.PNG", Vec2(480, 505));//  Ò¶3
+    setMenu("WelcomeScene/CarrotBody.PNG", Vec2(visibleSize.width / 2, visibleSize.height * 0.6)); // 
+    setMenu("WelcomeScene/MainTitle.PNG", Vec2(visibleSize.width / 2 + 30, visibleSize.height / 2 - 30));// 
 
-    /* ÉÏÏÂÒÆ¶¯µÄ¹ÖÊŞ */ 
+    /* è®¾ç½®æŒ‰é’® */
     auto flymonster = Sprite::create("WelcomeScene/FlyMonster.PNG");
-    flymonster->setPosition(Vec2(180, 470)); // ÉèÖÃ¹ÖÊŞµÄ³õÊ¼Î»ÖÃ
+    flymonster->setPosition(Vec2(180, 470)); // æ€ªç‰©çš„åˆå§‹ä½ç½®
     this->addChild(flymonster, 1);
-    // ÊµÏÖÉÏÏÂÒÆ¶¯
-    auto moveUp = MoveBy::create(1.5f, Vec2(0, 50)); // ÏòÉÏÒÆ¶¯50¸öµ¥Î»
-    auto moveDown = moveUp->reverse(); // ÏòÏÂÒÆ¶¯Í¬ÑùµÄ¾àÀë
-    auto floatAction = RepeatForever::create(Sequence::create(moveUp, moveDown, nullptr)); // ²»¶ÏÖØ¸´ÉÏÏÂÒÆ¶¯µÄ¶¯×÷
+    // å®ç°æ€ªç‰©ç§»åŠ¨
+    auto moveUp = MoveBy::create(1.5f, Vec2(0, 50)); // ç§»åŠ¨50åƒç´ 
+    auto moveDown = moveUp->reverse(); // ç§»åŠ¨ç›¸åŒè·ç¦»
+    auto floatAction = RepeatForever::create(Sequence::create(moveUp, moveDown, nullptr)); // é‡å¤ç§»åŠ¨åŠ¨ä½œ
     flymonster->runAction(floatAction);
 
-    /* ÉèÖÃ°´Å¥ */
+    /* è®¾ç½®æŒ‰é’® */
     auto settingsButton = ui::Button::create("WelcomeScene/Btn_Set.PNG", "WelcomeScene/Btn_SetLight.PNG");
-    settingsButton->setPosition(Vec2(210, 230)); // ÉèÖÃ°´Å¥µÄ³õÊ¼Î»ÖÃ
-    // °´Å¥µã»÷ÊÂ¼ş´¦ÀíÂß¼­
+    settingsButton->setPosition(Vec2(210, 230)); // æŒ‰é’®çš„åˆå§‹ä½ç½®
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     settingsButton->addClickEventListener([=](Ref*) {
-        // ´´½¨ÕÚÕÖ²ã
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // åˆ›å»ºé®ç½©å±‚
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // é®ç½©å±‚
         this->addChild(maskLayer);
 
-        float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // åŠ¨ç”»çš„æŒç»­æ—¶é—´
+        float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®çš„Yåæ ‡
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SettingScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SettingScene::create(), Color3B::BLACK)); // åˆ‡æ¢åˆ°æ–°åœºæ™¯
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);
         });
     this->addChild(settingsButton, 0);
 
-    /* °ïÖú°´Å¥ */
+    /* è®¾ç½®æŒ‰é’® */
     auto helpButton = ui::Button::create("WelcomeScene/Btn_Help.PNG", "WelcomeScene/Btn_HelpLight.PNG");
-    helpButton->setPosition(Vec2(770, 230)); // ÉèÖÃ°´Å¥µÄ³õÊ¼Î»ÖÃ
-    // °´Å¥µã»÷ÊÂ¼ş´¦ÀíÂß¼­
+    helpButton->setPosition(Vec2(770, 230)); // æŒ‰é’®çš„åˆå§‹ä½ç½®
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     helpButton->addClickEventListener([=](Ref*) {
-        // ´´½¨ÕÚÕÖ²ã
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // åˆ›å»ºé®ç½©å±‚
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // é®ç½©å±‚
         this->addChild(maskLayer);
 
-        float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // åŠ¨ç”»çš„æŒç»­æ—¶é—´
+        float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®çš„Yåæ ‡
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, HelpScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, HelpScene::create(), Color3B::BLACK)); // åˆ‡æ¢åˆ°æ–°åœºæ™¯
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);
         });
     this->addChild(helpButton, 0);
 
-    /* Ã°ÏÕÄ£Ê½ */
+    /* æ™®é€šæ¨¡å¼ */ 
     auto Normal = MenuItemImage::create("WelcomeScene/Btn_NormalModle.PNG", 
         "WelcomeScene/Btn_NormalModleLight.PNG", 
         CC_CALLBACK_1(WelcomeScene::gotoSelectScene, this));
@@ -130,7 +130,7 @@ bool WelcomeScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
-    /* BossÄ£Ê½ */ 
+    /* Bossæ¨¡å¼ */ 
     auto Boss = MenuItemImage::create("WelcomeScene/Btn_Boss.PNG", 
         "WelcomeScene/Btn_BossLight.PNG", 
         CC_CALLBACK_1(WelcomeScene::bossLock, this));
@@ -140,7 +140,7 @@ bool WelcomeScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
-    /* ¹ÖÎïÎÑÄ£Ê½ */ 
+    /* æ€ªç‰©æ¨¡å¼ */ 
     auto MonsterNest = MenuItemImage::create("WelcomeScene/Btn_MonsterNest.PNG",
         "WelcomeScene/Btn_MonsterNestLight.PNG",
         CC_CALLBACK_1(WelcomeScene::nestLock, this));
@@ -150,27 +150,27 @@ bool WelcomeScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
-    /* lockÍ¼±ê */
+    /* lockå›¾æ ‡ */
     setMenu("WelcomeScene/lock.PNG", Vec2(610, 70)); 
     setMenu("WelcomeScene/lock.PNG", Vec2(940, 70)); 
 }
 
-/* ½øÈë¹Ø¿¨Ñ¡Ôñ½çÃæ */ 
+/* é€‰æ‹©åœºæ™¯ */ 
 void WelcomeScene::gotoSelectScene(cocos2d::Ref* pSender)
 {
-    // »ñÈ¡ÆÁÄ»´óĞ¡
+    // è·å–å±å¹•å¤§å°
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-    // ´´½¨ÕÚÕÖ²ã
-    auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+    // åˆ›å»ºé®ç½©å±‚
+    auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // é®ç½©å±‚
     this->addChild(maskLayer);
 
-    float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-    float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+    float duration = 0.1f; // åŠ¨ç”»çš„æŒç»­æ—¶é—´
+    float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®çš„Yåæ ‡
 
     auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
-    auto callback = CallFunc::create([]() {                                   //ĞŞ¸Ä´Ë´¦
-        Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+    auto callback = CallFunc::create([]() {                                   //ä¿®æ”¹æ­¤å¤„
+        Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::create(), Color3B::BLACK)); // åˆ‡æ¢åˆ°æ–°åœºæ™¯
         });
     auto sequence = Sequence::create(moveUp, callback, nullptr);
     maskLayer->runAction(sequence);
@@ -178,44 +178,44 @@ void WelcomeScene::gotoSelectScene(cocos2d::Ref* pSender)
 
 void WelcomeScene::bossLock(Ref* pSender)
 {
-    // »ñÈ¡ÆÁÄ»´óĞ¡
+    // è·å–å±å¹•å¤§å°
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-    // ´´½¨ÌáÊ¾¿ò
+    // åˆ›å»ºæ€ªç‰©é”
     auto bosslock = ui::ImageView::create("WelcomeScene/boss_lock_image.png");
     bosslock->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(bosslock);
 
-    // ´´½¨¹Ø±Õ°´Å¥
+    // è®¾ç½®å…³é—­æŒ‰é’®
     auto closeButton = ui::Button::create("WelcomeScene/lock_btn_normal.PNG",
         "WelcomeScene/lock_btn_selected.PNG");
     closeButton->setPosition(Vec2(270, 60));
-    bosslock->addChild(closeButton); // ½«°´Å¥Ìí¼Óµ½ÌáÊ¾¿òÏÂ
+    bosslock->addChild(closeButton); // æŒ‰é’®æ·»åŠ åˆ°æ€ªç‰©é”ä¸Š
 
-    // Ìí¼Óµã»÷ÊÂ¼ş¼àÌıÆ÷
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     closeButton->addClickEventListener([=](Ref*) {
-        bosslock->removeFromParent(); // ÒÆ³ıÌáÊ¾¿ò
+        bosslock->removeFromParent(); // ç§»é™¤æ€ªç‰©é”
         });
 }
 
 void WelcomeScene::nestLock(Ref* pSender)
 {
-    // »ñÈ¡ÆÁÄ»´óĞ¡
+    // è·å–å±å¹•å¤§å°
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-    // ´´½¨ÌáÊ¾¿ò
+    // åˆ›å»ºæ€ªç‰©é”
     auto bosslock = ui::ImageView::create("WelcomeScene/nest_lock_image.png");
     bosslock->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(bosslock);
 
-    // ´´½¨¹Ø±Õ°´Å¥
+    // è®¾ç½®å…³é—­æŒ‰é’®
     auto closeButton = ui::Button::create("WelcomeScene/lock_btn_normal.PNG",
         "WelcomeScene/lock_btn_selected.PNG");
     closeButton->setPosition(Vec2(270, 60));
-    bosslock->addChild(closeButton); // ½«°´Å¥Ìí¼Óµ½ÌáÊ¾¿òÏÂ
+    bosslock->addChild(closeButton); // æŒ‰é’®æ·»åŠ åˆ°æ€ªç‰©é”ä¸Š
 
-    // Ìí¼Óµã»÷ÊÂ¼ş¼àÌıÆ÷
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     closeButton->addClickEventListener([=](Ref*) {
-        bosslock->removeFromParent(); // ÒÆ³ıÌáÊ¾¿ò
+        bosslock->removeFromParent(); // ç§»é™¤æ€ªç‰©é”
         });
 }

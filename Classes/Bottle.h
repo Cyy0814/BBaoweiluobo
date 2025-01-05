@@ -11,7 +11,7 @@ class Bottle : public Tower {
 public:
     static Bottle* create(const cocos2d::Vec2& position);
 
-    // ��������߼�
+    // 攻击相关逻辑
     void update(float dt, std::vector<Monster*> monsters);
     void attack(Monster* target);
 

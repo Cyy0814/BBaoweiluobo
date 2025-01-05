@@ -27,18 +27,19 @@ void Bullet::moveToTarget() {
         return;
     }
 
-    // ¥¥Ω®∂® ±∆˜£¨≤ª∂œ∏¸–¬◊”µØµƒ∑…––∑ΩœÚ
+    // Êõ¥Êñ∞Â≠êÂºπÁöÑÈ£ûË°åÊñπÂêë
     auto updateFunc = [this](float dt) {
         if (target && this->getParent()) {
-            // º∆À„–¬µƒ∑ΩœÚ∫ÕŒª÷√
+            // ËÆ°ÁÆóÊñ∞ÁöÑÊñπÂêëÂíå‰ΩçÁΩÆ
             Vec2 direction = target->getPosition() - this->getPosition();
             float distance = direction.length();
-            if (distance < 10.0f) { // »Áπ˚◊”µØΩ”Ω¸ƒø±Í
-                target->getAttacked(damage); // ∂‘π÷ŒÔ‘Ï≥……À∫¶
+            if (distance < 10.0f) { // ÂΩìÂ≠êÂºπÊé•ËøëÁõÆÊ†á
+                target->getAttacked(damage); // ÂØπÊÄ™Áâ©ÈÄ†Êàê‰º§ÂÆ≥
                 this->stopAllActions();
                 this->removeFromParent();
             }
             else {
+                // Êõ¥Êñ∞Â≠êÂºπÁöÑÊñπÂêë
                 direction.normalize();
                 this->setPosition(this->getPosition() + direction * speed * dt);
             }
@@ -49,15 +50,15 @@ void Bullet::moveToTarget() {
         }
     };
 
-    // √ø÷°µ˜”√ updateFunc ¿¥∏¸–¬◊”µØŒª÷√
+    // ÊØèÂ∏ßÊõ¥Êñ∞Â≠êÂºπ‰ΩçÁΩÆ
     this->schedule(updateFunc, "bullet_update");
 }
 
 void Bullet::destroy() {
-    // Õ£÷πÀ˘”–∂Ø◊˜
+    // ÂÅúÊ≠¢ÊâÄÊúâÂä®‰Ωú
     this->stopAllActions();
 
-    // ¥”∏∏Ω⁄µ„“∆≥˝
+    // ‰ªéÁà∂ËäÇÁÇπÁßªÈô§
     if (this->getParent() != nullptr) {
         this->removeFromParent();
     }

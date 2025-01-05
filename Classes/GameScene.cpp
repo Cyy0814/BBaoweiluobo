@@ -1,4 +1,3 @@
-#include "SimpleAudioEngine.h"
 #include <string.h>
 #include "Global.h"
 #include "GameScene.h"
@@ -6,13 +5,14 @@
 #include "GoldCoinView.h"
 #include "SelectScene.h"
 #include "Level1.h"
+#include "LevelFactory.h"
 using namespace cocos2d;
 using namespace cocos2d::ui;
 
 USING_NS_CC;
 int level = 1;
 
-/* -------------------- µØÍ¼¹«¹²³¡¾°´î½¨ ---------------------- */
+/* -------------------- åœºæ™¯ ---------------------- */
 Scene* GameScene::createScene()
 {
     return GameScene::create();
@@ -20,45 +20,45 @@ Scene* GameScene::createScene()
 
 bool GameScene::init()
 {
-    /* ³õÊ¼»¯³¡¾° */
+    /* åˆå§‹åŒ– */
     if (!Scene::init())
     {
         return false;
     }
 
-    /* »ñÈ¡ÆÁÄ»´óĞ¡ */
+    /* è·å–å±å¹•å¤§å° */
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /* ÉèÖÃ²Ëµ¥À¸ */
+    /* è®¾ç½®èœå• */
     auto menu = Sprite::create("GameScene/menu.PNG");
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 38));
     this->addChild(menu);
 
-    /* ÉèÖÃÊ£Óà²¨Êı */
+    /* å‰©ä½™ç”Ÿå‘½ */
     auto gameover = Sprite::create("GameScene/gameover.PNG");
     gameover->setPosition(Vec2(visibleSize.width / 2 - 80, visibleSize.height - 33));
     this->addChild(gameover);
 
-    /* ÏÔÊ¾½ğ±ÒÊıÁ¿ */
-    // ´´½¨ GoldCoin ¶ÔÏó
+    /* é‡‘å¸æ˜¾ç¤º */
+    //å°† GoldCoin å’Œ GoldCoinView æ·»åŠ åˆ°åœºæ™¯ä¸­
     goldCoin = GoldCoin::create();
     goldCoinView = GoldCoinView::create(goldCoin);
 
     if (goldCoin && goldCoin->init())
     {
-        // ½« GoldCoin ºÍ GoldCoinView Ìí¼Óµ½³¡¾°ÖĞ
+        //  GoldCoin æ·»åŠ åˆ°åœºæ™¯ä¸­
         this->addChild(goldCoin);
         this->addChild(goldCoinView);
 
-        // ¼ÙÉèµ±Ç°½ğ±ÒÊıÁ¿Îª 500
+        // å½“å‰é‡‘å¸ä¸º 500
         int currentGold = 500;
 
-        // ¸üĞÂ½ğ±ÒÊıÁ¿ÏÔÊ¾
+        // æ›´æ–°æ˜¾ç¤º
         goldCoin->updateGoldValue(currentGold);
     }
 
-    /* ±¶ËÙ°´Å¥ */
+    /* é€Ÿåº¦æŒ‰é’® */
     auto speedButton = Button::create("GameScene/speed_button.PNG");
     speedButton->setPosition(Vec2(visibleSize.width / 2 + 150, visibleSize.height - 38));
     this->addChild(speedButton, 1);
@@ -66,89 +66,84 @@ bool GameScene::init()
         if (type == Widget::TouchEventType::ENDED)
         {
             static bool isDoubleSpeed = false;
-            isDoubleSpeed = !isDoubleSpeed; // ÇĞ»»ËÙ¶È×´Ì¬
+            isDoubleSpeed = !isDoubleSpeed; // åˆ‡æ¢åŠ é€ŸçŠ¶æ€
 
-            float speed = isDoubleSpeed ? 2.0f : 1.0f; // ¸ù¾İ×´Ì¬Ñ¡ÔñËÙ¶È
+            float speed = isDoubleSpeed ? 2.0f : 1.0f; // æ ¹æ®çŠ¶æ€é€‰æ‹©é€Ÿåº¦
             Director::getInstance()->getScheduler()->setTimeScale(speed);
 
-            // ¸üĞÂ°´Å¥µÄÍ¼°¸
+            // åˆ‡æ¢æŒ‰é’®å›¾æ ‡
             std::string buttonImage = isDoubleSpeed ? "GameScene/speed_button_selected.PNG" : "GameScene/speed_button.PNG";
             speedButton->loadTextureNormal(buttonImage);
         }
         }); 
 
-    /* ÔİÍ£°´Å¥ */
+    /* æš‚åœæŒ‰é’® */
     auto pauseButton = Button::create("GameScene/pause_button.PNG");
     pauseButton->setPosition(Vec2(visibleSize.width / 2 + 300, visibleSize.height - 38));
     this->addChild(pauseButton);
     pauseButton->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
         if (type == Widget::TouchEventType::ENDED) {
-            // ÇĞ»»ÔİÍ£×´Ì¬
+            // åˆ‡æ¢æš‚åœçŠ¶æ€
             isGamePaused = !isGamePaused; 
             if (isGamePaused) {
-                Director::getInstance()->pause(); // ÔİÍ£ÓÎÏ·
-                // ÇĞ»»µ½»Ö¸´Í¼±ê
+                Director::getInstance()->pause(); // æš‚åœæ¸¸æˆ
+                // åˆ‡æ¢æ¢å¤å›¾æ ‡
                 pauseButton->loadTextures("GameScene/pause_button_selected.PNG", "GameScene/pause_button_selected_light.PNG");
             }
             else {
-                Director::getInstance()->resume(); // »Ö¸´ÓÎÏ·
-                // ÇĞ»»µ½ÔİÍ£Í¼±ê
+                Director::getInstance()->resume(); // æ¢å¤æ¸¸æˆ
+                // åˆ‡æ¢æš‚åœå›¾æ ‡
                 pauseButton->loadTextures("GameScene/pause_button.PNG", "GameScene/pause_button.PNG");
             }
         }
         });
-    /* Ñ¡Ïî°´Å¥ */
+    /* é€‰é¡¹æŒ‰é’® */
     GameScene::options();
 
     return true;
 }
 
-// ÊµÏÖÑ¡Ïî°´Å¥ÏÂµÄ²Ëµ¥
+// é€‰é¡¹æŒ‰é’®çš„å›è°ƒå‡½æ•°
 void GameScene::options()
 {
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-    /* Ñ¡Ïî°´Å¥ */
+    /* é€‰é¡¹æŒ‰é’® */
     auto choiceButton = Button::create("GameScene/choice_button.PNG");
     choiceButton->setPosition(Vec2(visibleSize.width / 2 + 400, visibleSize.height - 38));
     this->addChild(choiceButton, 1);
     choiceButton->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
         if (type == Widget::TouchEventType::ENDED)
         {
-            /* µã»÷ºó³öÏÖÌáÊ¾¿ò */
-            // ÀàÃÉ°æ²ã
+            /* åˆ›å»ºé®ç½©å±‚ */
+            // åˆ›å»ºé®ç½©å±‚
             maskLayer = LayerColor::create(Color4B(0, 0, 0, 150));
             this->getParent()->addChild(maskLayer, 6);
 
-            // ´´½¨ÌáÊ¾¿ò
+            // æ˜¾ç¤ºé€‰é¡¹ç•Œé¢
             auto options = ImageView::create("GameScene/options.png");
             options->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
             maskLayer->addChild(options, 2);
 
-            // ÒÔÏÂ°´Å¥¶¼Ìí¼ÓÔÚ options ²ãÉÏ 
-            // ÖØĞÂ¿ªÊ¼°´Å¥
+            // é€‰é¡¹æŒ‰é’®
+            // é‡å¯æŒ‰é’®
             auto restartButton = ui::Button::create("GameScene/restart_normal.png", "GameScene/restart_selected.png");
             restartButton->setPosition(Vec2(210, 185));
             options->addChild(restartButton);
             restartButton->addClickEventListener([=](Ref*) {
-                Director::getInstance()->resume();
-                Director::getInstance()->getScheduler()->setTimeScale(1);
 
-                // ÖØĞÂ¿ªÊ¼ÓÎÏ·
-                auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
-                this->addChild(maskLayer);
-                float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-                float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+                /*Refactored with Factory Pattern*/
 
-                auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
-                auto callback = CallFunc::create([]() {
-                    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, Level1Scene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
-                    });
-                auto sequence = Sequence::create(moveUp, callback, nullptr);
-                maskLayer->runAction(sequence);
-                });
+                auto level = LevelFactory::createLevel(currentLevel);
+                if (level) {
+                    Director::getInstance()->replaceScene(
+                        TransitionFade::create(0.5f, level, Color3B::BLACK)
+                    );
+                }
+                
+            });
 
-            // Ñ¡Ôñ¹Ø¿¨°´Å¥
+            // è¿”å›æŒ‰é’®
             auto returnButton = ui::Button::create("GameScene/return_normal.png", "GameScene/return_selected.png");
             returnButton->setPosition(Vec2(210, 90));
             options->addChild(returnButton);
@@ -156,68 +151,68 @@ void GameScene::options()
                 Director::getInstance()->resume();
                 Director::getInstance()->getScheduler()->setTimeScale(1);
 
-                // ·µ»ØÑ¡Ôñ½çÃæ
-                auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+                // åˆ›å»ºé®ç½©å±‚
+                auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // åˆ›å»ºé®ç½©å±‚
                 this->addChild(maskLayer);
-                float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-                float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+                float duration = 0.1f; // æŒç»­æ—¶é—´
+                float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®Y
 
                 auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
                 auto callback = CallFunc::create([]() {
-                    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+                    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::create(), Color3B::BLACK)); // åˆ‡æ¢åœºæ™¯
                     });
                 auto sequence = Sequence::create(moveUp, callback, nullptr);
                 maskLayer->runAction(sequence);
                 });
 
-            // ¼ÌĞøÓÎÏ·°´Å¥
+            // æ¢å¤æŒ‰é’®
             auto resumeButton = Button::create("GameScene/resume_normal.png", "GameScene/resume_selected.png");
             resumeButton->setPosition(Vec2(210, 278));
             options->addChild(resumeButton);
             resumeButton->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
                 if (type == Widget::TouchEventType::ENDED)
                 {
-                    // »Ö¸´ÓÎÏ·
+                    // æ¢å¤æ¸¸æˆ
                     Director::getInstance()->resume();
-                    // ÒÆ³ıÔİÍ£²Ëµ¥
+                    // ç§»é™¤é€‰é¡¹ç•Œé¢
                     options->removeFromParent();
-                    // ÒÆ³ıÃÉ°æ²ã
+                    // ç§»é™¤é®ç½©å±‚
                     maskLayer->removeFromParent();
                 }
                 });
 
-            /* ÓÎÏ·ÔİÍ£Âß¼­ */
-            // ÓÎÏ·ÔİÍ£
+            /* æš‚åœæ¸¸æˆ */
+            // æš‚åœæ¸¸æˆ
             Director::getInstance()->pause();
 
-            // È·±£ÓÃ»§²»ÄÜµã»÷ÔİÍ£²Ëµ¥ºóÃæµÄÔªËØ£¬¿ÉÒÔÍ¨¹ıÌí¼ÓÒ»¸ö¼àÌıÆ÷µ½ÔİÍ£²Ëµ¥²ãÀ´ÍÌÊÉËùÓĞµã»÷ÊÂ¼ş
+            // ç¡®ä¿æ‰€æœ‰äº‹ä»¶ç›‘å¬å™¨éƒ½å·²æ·»åŠ 
             auto listener = EventListenerTouchOneByOne::create();
             listener->setSwallowTouches(true);
             listener->onTouchBegan = [](cocos2d::Touch* touch, cocos2d::Event* event) {
-                return true; // ÍÌÊÉ´¥ÃşÊÂ¼ş
+                return true; // è¿”å›trueè¡¨ç¤ºäº‹ä»¶å·²å¤„ç†
             };
             Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this->maskLayer);
         }
         });
 }
 
-// ´´½¨µ¹¼ÆÊ±¶¯»­µÄº¯Êı
+// åˆ›å»ºå€’è®¡æ—¶åŠ¨ç”»
 void GameScene::createCountdownAnimation()
 {
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    // ´´½¨ÀàÄÚÃÉ°æ²ã
+    // åˆ›å»ºé®ç½©å±‚
     maskLayer = LayerColor::create(Color4B(0, 0, 0, 150));
-    this->getParent()->addChild(maskLayer, 5); // È·±£ÃÉ°æ²ãµÄ²ã¼¶¸ßÓÚÆäËûÔªËØ
+    this->getParent()->addChild(maskLayer, 5); // ç¡®ä¿é®ç½©å±‚å·²æ·»åŠ 
 
-    // È·±£ÓÃ»§²»ÄÜµã»÷µ¹¼ÆÊ±ºóÃæµÄÔªËØ£¬¿ÉÒÔÍ¨¹ıÌí¼ÓÒ»¸ö¼àÌıÆ÷µ½ÔİÍ£²Ëµ¥²ãÀ´ÍÌÊÉËùÓĞµã»÷ÊÂ¼ş
+    // ç¡®ä¿æ‰€æœ‰äº‹ä»¶ç›‘å¬å™¨éƒ½å·²æ·»åŠ 
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     listener->onTouchBegan = [](cocos2d::Touch* touch, cocos2d::Event* event) {
-        return true; // ÍÌÊÉ´¥ÃşÊÂ¼ş
+        return true; // è¿”å›trueè¡¨ç¤ºäº‹ä»¶å·²å¤„ç†
     };
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this->maskLayer);
 
-    // ´´½¨µ¹¼ÆÊ±Ô²»·
+    // åˆ›å»ºåœ†åœˆ
     auto circlebase = Sprite::create("GameScene/circlebase.PNG");
     circlebase->setPosition(visibleSize / 2);
     maskLayer->addChild(circlebase);
@@ -225,49 +220,49 @@ void GameScene::createCountdownAnimation()
     circleSprite->setPosition(Vec2(visibleSize.width / 2 + 5, visibleSize.height / 2));
     maskLayer->addChild(circleSprite);
 
-    // ³õÊ¼»¯µ¹¼ÆÊ±Êı×Ö
-    auto countdownSprite = Sprite::create("GameScene/3.PNG"); // Ìæ»»ÎªÄúµÄ³õÊ¼µ¹¼ÆÊ±Êı×ÖÍ¼Æ¬
+    // åˆ›å»ºå€’è®¡æ—¶æ•°å­—
+    auto countdownSprite = Sprite::create("GameScene/3.PNG"); // æ›¿æ¢ä¸ºå®é™…çš„å€’è®¡æ—¶å›¾ç‰‡
     countdownSprite->setPosition(circleSprite->getPosition());
     maskLayer->addChild(countdownSprite);
 
-    // Ô²»·Ã¿ÃëÖÓÍê³ÉÒ»´ÎÑ­»·
+    // åœ†åœˆæ—‹è½¬
     circleSprite->runAction(RepeatForever::create(RotateBy::create(1.0f, 360)));
 
-    // µ¹¼ÆÊ±¿ªÊ¼£¬Ã¿Ãë¸üĞÂÒ»´ÎÊı×Ö
-    int countdownNumber = 3; // ´Ó3¿ªÊ¼µ¹¼ÆÊ±
+    // å€’è®¡æ—¶æ¯ç§’æ›´æ–°
+    int countdownNumber = 3; // 3ç§’å€’è®¡æ—¶
     auto scheduler = Director::getInstance()->getScheduler();
     scheduler->schedule([=](float dt) mutable {
         countdownNumber--;
-        // ¸üĞÂµ¹¼ÆÊ±Êı×Ö¾«ÁéµÄÎÆÀí
+        // æ›´æ–°å€’è®¡æ—¶æ•°å­—
         std::string frameName = "GameScene/" + std::to_string(countdownNumber) + ".PNG";
         countdownSprite->setTexture(frameName);
 
-        // µ±µ¹¼ÆÊ±½áÊøÊ±
+        // å€’è®¡æ—¶ç»“æŸ
         if (countdownNumber <= 0) {
-            scheduler->unschedule("countdown", this); // È¡Ïûµ¹¼ÆÊ±µ÷¶È
-            countdownSprite->setVisible(false); // Òş²ØÊı×Ö¾«Áé
-            // µ¹¼ÆÊ±½áÊøºó
+            scheduler->unschedule("countdown", this); // ç§»é™¤å€’è®¡æ—¶
+            countdownSprite->setVisible(false); // éšè—å€’è®¡æ—¶æ•°å­—
+            // ç§»é™¤é®ç½©å±‚
             maskLayer->removeFromParent();
         }
       
         }, this, 1.0f, false, "countdown");
 }
 
-/* -------------------- ¶ÔµØÍ¼Íø¸ñ»¯ÊµÏÖ ---------------------- */
+/* -------------------- æ¸¸æˆåœ°å›¾ ---------------------- */
 bool GameMap::init()
 {
     if (!Layer::init()) {
         return false;
     }
-    setupGrid(); // ÉèÖÃÍø¸ñ
+    setupGrid(); // 
 
-    // ÉèÖÃµ¹¼ÆÊ±ÒÔÆ¥Åä¶¯»­
-    int countdownNumber = 3; // ´Ó3¿ªÊ¼µ¹¼ÆÊ±
+    // å€’è®¡æ—¶
+    int countdownNumber = 3; // 3ç§’å€’è®¡æ—¶
     auto scheduler = Director::getInstance()->getScheduler();
     scheduler->schedule([=](float dt) mutable {
         countdownNumber--;
         if (countdownNumber <= 0) {
-            // ´òÓ¡¿ò¸ñ
+            // æ‰“å°å¼€å§‹ç²¾çµ
             GameMap::printStartSprite();
 
         }
@@ -281,7 +276,7 @@ void GameMap::setupGrid() {
 
     for (int y = 0; y < GRID_HEIGHT; ++y) {
         for (int x = 0; x < GRID_WIDTH; ++x) {
-            // ³õÊ¼»¯Ã¿¸ö¸ñ×Ó
+            // åˆå§‹åŒ–
             if (y == 7)
                 gridMap[y][x] = false;
             else
@@ -291,7 +286,7 @@ void GameMap::setupGrid() {
 }
 
 void GameMap::addPathPoint(Grid g) {
-    // È·±£×ø±êÔÚµØÍ¼·¶Î§ÄÚ
+    // ç¡®ä¿ç‚¹åœ¨åœ°å›¾èŒƒå›´å†…
     if (g.x >= 0 && g.x < GRID_WIDTH && g.y >= 0 && g.y < GRID_HEIGHT) {
         path.push_back(g);
         gridMap[g.y][g.x] = false;
@@ -312,11 +307,11 @@ GameMap::Grid GameMap::pixelToGrid(float x, float y) {
 
 void GameMap::printStartSprite()
 {
-    // ´´½¨¿ÉÒÔ·ÅÖÃÅÚÌ¨µÄÎ»ÖÃ
+    // æ‰“å°å¼€å§‹ç²¾çµ
     for (int y = 0; y < GRID_HEIGHT - 1; ++y) {
         for (int x = 0; x < GRID_WIDTH; ++x) {
             if (gridMap[y][x]) {
-                // ´òÓ¡¸ñ×Ó
+                // æ‰“å°
                 auto StartSprite = ImageView::create("GameScene/StartSprite.png");
                 StartSprite->setPosition(gridToPixel(x, y));
                 this->addChild(StartSprite);
@@ -324,18 +319,29 @@ void GameMap::printStartSprite()
         }
     }
 
-    // ´´½¨Ò»¸öÉÁË¸¶¯×÷
+    // é—ªçƒæ•ˆæœ
     auto blinkAction = cocos2d::Blink::create(2, 4);
 
-    // ´´½¨Ò»¸ö»Øµ÷¶¯×÷£¬ÔÚÉÁË¸½áÊøºóÒÆ³ıÍ¼²ã
+    // ç§»é™¤é®ç½©å±‚
     auto removeLayer = CallFunc::create([this]() {
         this->removeFromParent();
         });
 
-    // ´´½¨Ò»¸ö¶¯×÷ĞòÁĞ£¬ÏÈÉÁË¸£¬ºóÒÆ³ı
+    // åˆ›å»ºé—ªçƒæ•ˆæœ
     auto sequence = Sequence::create(blinkAction, removeLayer, nullptr);
 
-    // ÔËĞĞ¶¯×÷ĞòÁĞ
+    // æ‰§è¡Œ
     this->runAction(sequence);
 
+}
+
+/*Refactored with Factory Pattern*/
+void GameScene::restartLevel() {
+    // ä½¿ç”¨å·¥å‚é‡æ–°åˆ›å»ºå½“å‰å…³å¡
+    auto level = LevelFactory::createLevel(currentLevel);
+    if (level) {
+        Director::getInstance()->replaceScene(
+            TransitionFade::create(0.5f, level, Color3B::BLACK)
+        );
+    }
 }

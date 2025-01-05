@@ -9,11 +9,11 @@ bool GoldCoin::init()
         return false;
     }
 
-    m_value = 0;  // 初始金币数量
+    m_value = 0;  // 鍒濆鍖栭噾甯佹暟
     return true;
 }
 
-// Refactored with Observer Pattern
+/*Refactored with Observer Pattern*/
 void GoldCoin::notifyGoldChanged()
 {
     notifyObservers("gold_changed", m_value);

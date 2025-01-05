@@ -15,13 +15,13 @@ public:
     virtual bool init() override;
     virtual ~Carrot();
     
-    // HPÏà¹Ø
+    // HPç›¸å…³
     static const int MAX_HEALTH = 10;
     int getHealth() const { return health; }
     void setHealth(int value);
     void decreaseHealth();
     
-    // ×´Ì¬Ïà¹Ø
+    // çŠ¶æ€ç›¸å…³
     void changeState(CarrotState* newState);
     CarrotState* getCurrentState() const { return currentState; }
     std::string getCurrentTexturePath() const;

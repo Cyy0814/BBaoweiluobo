@@ -6,21 +6,21 @@ using namespace cocos2d;
 using namespace cocos2d::ui;
 
 enum LevelTags {
-    // 关卡标签
+    // 鍏冲崱鏍囩
     TAG_LEVEL_1 = 100,
     TAG_LEVEL_2,
     TAG_LEVEL_3,
     TAG_LEVEL_4,
     TAG_LEVEL_5,
-    // 页面标签
+    // 椤甸潰鏍囩
     TAG_LEVEL_IMAGE = 200,
-    // 锁定标签
+    // 閿佸畾鏍囩
     TAG_LOCK_IMAGE = 210,
-    // 完成标签
+    // 瀹屾垚鏍囩
     TAG_FINISH_IMAGE = 220,
-    // 按钮标签
+    // 鎸夐挳鏍囩
     TAG_START_BUTTON = 300,
-    // 视图标签
+    // 瑙嗗浘鏍囩
     TAG_PAGE_VIEW
 };
 

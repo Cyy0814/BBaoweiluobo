@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "Global.h"
+#include "IAttackStrategy.h"
 using namespace cocos2d;
 using namespace cocos2d::ui;
 
@@ -12,21 +13,25 @@ USING_NS_CC;
 Bottle* Bottle::create(const Vec2& position) {
     Bottle* bottle = new (std::nothrow) Bottle();
     if (bottle && bottle->init()) {
-        //1/2 ³¢ÊÔ½«baseÖÆ³É³ÉÔ±±äÁ¿£¬Ï£Íû´ïµ½ÔÚupgradeÊ±²»»áÖØ¸´³öÏÖ
+        //1/2 å¯ä»¥å°†baseæ”¹æˆæˆå‘˜å˜é‡ï¼Œè¿™æ ·å°±è¾¾åˆ°åœ¨upgradeæ—¶ä¸é‡å¤åˆ›å»º
         bottle->base = Sprite::create("Tower/Bottle/ID1_11.PNG");
         bottle->base->setPosition(bottle->getPosition().x + 15, bottle->getPosition().y + 25);
         
         bottle->addChild(bottle->base, -1);
 
-        bottle->setTexture("Tower/Bottle/ID1_22.PNG"); // ³õÊ¼Íâ¹Û
+        bottle->setTexture("Tower/Bottle/ID1_22.PNG"); // åˆå§‹åŒ–å¡”
         bottle->autorelease();
         bottle->setPosition(position);
 
-        bottle->attackDamage = 100;    // ÉèÖÃ¹¥»÷ÉËº¦
-        bottle->attackRange = 200.0f;  // ÉèÖÃ¹¥»÷·¶Î§
-        bottle->attackSpeed = 1000.0f; // ÉèÖÃ¹¥»÷ËÙ¶È
+        bottle->attackDamage = 100;    // è®¾ç½®æ”»å‡»ä¼¤å®³
+        bottle->attackRange = 200.0f;  // è®¾ç½®æ”»å‡»èŒƒå›´
+        bottle->attackSpeed = 1000.0f; // è®¾ç½®æ”»å‡»é€Ÿåº¦
         bottle->timeSinceLastAttack = 0;
         bottles.push_back(bottle);
+
+        // æ³¨å…¥æ”»å‡»ç­–ç•¥
+        bottle->setAttackStrategy(new BottleAttackStrategy());
+        
         return bottle;
     }
     CC_SAFE_DELETE(bottle);
@@ -38,16 +43,16 @@ void Bottle::upgrade()
     if (level < 3 && goldCoin->m_value > 70) {
         level++;
 
-        // ¸üĞÂÍâ¹Û
+        // æ›´æ–°çº¹ç†
         std::string textureName = "Tower/Bottle/Level" + std::to_string(level) + ".PNG";
         setTexture(textureName);
        // this->base->setPosition(this->getPosition().x + 15, this->getPosition().y + 25);
-        // Õ½Á¦ÌáÉı
+        // æˆ˜æ–—å±æ€§
         attackSpeed += 400;
         attackDamage += 50;
         attackRange += 100;
 
-        // ¿ÛÇ®
+        // æ‰£é’±
         goldCoin->earnGold(-70);
     }
 }
@@ -61,17 +66,17 @@ void Bottle::remove()
     else
         goldCoin->earnGold(180);
 
-    // É¾³ıÌØĞ§
+    // åˆ é™¤ç‰¹æ•ˆ
     auto Delete = cocos2d::Sprite::create("Tower/Tower_Delete.PNG");
     Delete->setPosition(this->getPosition());
     this->getParent()->addChild(Delete);
 
-    // ÉèÖÃÒ»¸ö¶¯×÷À´ÒÆ³ıÉ¾³ıÌØĞ§
-    auto fadeOut = cocos2d::FadeOut::create(0.5f); // ³ÖĞøÊ±¼ä¿ÉÒÔ¸ù¾İĞèÒªµ÷Õû
+    // åŠ¨ç”»æ—¶é—´å¯ä»¥æ ¹æ®éœ€è¦è°ƒæ•´
+    auto fadeOut = cocos2d::FadeOut::create(0.5f);
     auto removeExplosion = cocos2d::RemoveSelf::create();
     auto sequence = cocos2d::Sequence::create(fadeOut, removeExplosion, nullptr);
     Delete->runAction(sequence);
-    /****1/2¸üĞÂ Ö¸ÕëÏòÁ¿ÖÃÁã*****************************/
+    /**** 1/2æ¸…é™¤ æŒ‡é’ˆæ•°ç»„å†…å®¹ *****************************/
     for (auto iter = bottles.begin(); iter != bottles.end();)
     {
         if (this == *iter)
@@ -97,24 +102,24 @@ void Bottle::update(float dt, std::vector<Monster*> monsters) {
             cocos2d::Vec2 towerPosition = getPosition();
             cocos2d::Vec2 targetPosition = monstersInRange[0]->getPosition();
 
-            // ¼ÆËãËşÖ¸ÏòÄ¿±êµÄÏòÁ¿
+            // æ–¹å‘
             cocos2d::Vec2 direction = targetPosition - towerPosition;
-            direction.normalize();  // ½«ÏòÁ¿¹éÒ»»¯Îªµ¥Î»ÏòÁ¿
+            direction.normalize();  // å½’ä¸€åŒ–
 
-            // ¼ÆËãĞı×ª½Ç¶È
+            // æ—‹è½¬è§’åº¦
             float angle = CC_RADIANS_TO_DEGREES(atan2(direction.y, direction.x)) - 90;
             auto rotateAction = cocos2d::RotateBy::create(0.01f, angle);
             this->runAction(rotateAction);
 
 
-            attack(monstersInRange.front()); // ¹¥»÷µÚÒ»¸ö¹ÖÎï
+            attack(monstersInRange.front()); // æ”»å‡»ç¬¬ä¸€ä¸ª
             timeSinceLastAttack = 0;
         }
     }
 }
 
 void Bottle::attack(Monster* target) {
-    bullet = Bullet::createWithTarget(target, "Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
-    bullet->setPosition(getPosition());
-    this->getParent()->addChild(bullet);
+    if(attackStrategy) {
+        attackStrategy->attack(getPosition(), target, attackDamage);
+    }
 }

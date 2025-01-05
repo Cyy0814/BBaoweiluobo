@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "Subject.h"
 
-// Refactored with Observer Pattern
+/*Refactored with Observer Pattern*/
 class GoldCoin : public cocos2d::Node, public Subject {
 private:
     int m_value;
@@ -13,18 +13,17 @@ private:
 public:
     virtual bool init() override;
     
-    // »ñÈ¡/ÉèÖÃ½ğ±ÒÖµ
+    // è·å–/è®¾ç½®é‡‘å¸å€¼
     int getValue() const { return m_value; }
     void setValue(int value);
     
-    // ½ğ±Ò²Ù×÷
+    // é‡‘å¸æ“ä½œ
     void updateGoldValue(int goldValue);
 
-
-    // »÷°Ü¹ÖÎï»ñµÃ½ğ±Ò
+    // è·å¾—æˆ–æ¶ˆè€—é‡‘å¸
     void earnGold(int amount);
     
-    // ¹ºÂòÅÚËşÏûºÄ½ğ±Ò
+    // è´­ä¹°é˜²å¾¡å¡”æ¶ˆè€—é‡‘å¸
     bool purchaseTower(int cost);
 
     CREATE_FUNC(GoldCoin);

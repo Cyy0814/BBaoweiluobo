@@ -8,6 +8,7 @@
 #include "ui/CocosGUI.h"
 #include"cocos2d.h"
 #include "cocos/ui/UIImageView.h"
+#include "LevelFactory.h"
 
 USING_NS_CC;
 using namespace cocos2d::ui;
@@ -20,22 +21,22 @@ Scene* SelectScene::createScene()
 
 bool SelectScene::init()
 {
-    /* ³õÊ¼»¯³¡¾° */
+    /* åˆå§‹åŒ–åœºæ™¯ */
     if (!Scene::init())
     {
         return false;
     }
 
-    /* »ñÈ¡ÆÁÄ»´óĞ¡ */
+    /* è·å–å±å¹•å¤§å° */
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /* ÉèÖÃ±³¾° */
+    /* è®¾ç½®èƒŒæ™¯ */
     auto backGround = Sprite::create("SelectScene/stages_bg-hd_0.PNG");
     backGround->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(backGround, 0);
 
-    /* ÔÆ¶ä±³¾° */
+    /* ç§»åŠ¨èƒŒæ™¯ */
     auto cloud1 = Sprite::create("SelectScene/BG_Left.PNG");
     cloud1->setPosition(Vec2(130, 75));
     this->addChild(cloud1, 0);
@@ -44,49 +45,49 @@ bool SelectScene::init()
     cloud2->setPosition(Vec2(830, 75));
     this->addChild(cloud2, 0);
 
-    /* ·µ»ØÖ÷½çÃæ°´Å¥ */
+    /* è¿”å›ä¸»èœå•æŒ‰é’® */
     auto backToWelcome = ui::Button::create("SelectScene/stages_bg-hd_41.PNG", "SelectScene/stages_bg-hd_40.PNG");
-    backToWelcome->setPosition(Vec2(40, 610)); // ÉèÖÃ°´Å¥µÄ³õÊ¼Î»ÖÃ
-    // °´Å¥µã»÷ÊÂ¼ş´¦ÀíÂß¼­
+    backToWelcome->setPosition(Vec2(40, 610)); // æŒ‰é’®åˆå§‹ä½ç½®
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     backToWelcome->addClickEventListener([=](Ref*) {
-        // ´´½¨ÕÚÕÖ²ã
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // åˆ›å»ºé®ç½©å±‚
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // åŠé€æ˜é»‘è‰²é®ç½©å±‚
         this->addChild(maskLayer);
 
-        float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // åŠ¨ç”»çš„æŒç»­æ—¶é—´
+        float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®çš„Yåæ ‡
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, WelcomeScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, WelcomeScene::create(), Color3B::BLACK)); // åˆ‡æ¢åˆ°æ–°åœºæ™¯
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);
         });
     this->addChild(backToWelcome, 1);
   
-    /* °ïÖú°´Å¥ */
+    /* å¸®åŠ©æŒ‰é’® */
     auto helpButton = ui::Button::create("SelectScene/stages_bg-hd_42.PNG", "SelectScene/stages_bg-hd_33.PNG");
-    helpButton->setPosition(Vec2(920, 610)); // ÉèÖÃ°´Å¥µÄ³õÊ¼Î»ÖÃ
-    // °´Å¥µã»÷ÊÂ¼ş´¦ÀíÂß¼­
+    helpButton->setPosition(Vec2(920, 610)); // æŒ‰é’®åˆå§‹ä½ç½®
+    // æŒ‰é’®ç‚¹å‡»äº‹ä»¶å¤„ç†é€»è¾‘
     helpButton->addClickEventListener([=](Ref*) {
-        // ´´½¨ÕÚÕÖ²ã
-        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
+        // åˆ›å»ºé®ç½©å±‚
+        auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // åŠé€æ˜é»‘è‰²é®ç½©å±‚
         this->addChild(maskLayer);
 
-        float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-        float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
+        float duration = 0.1f; // åŠ¨ç”»çš„æŒç»­æ—¶é—´
+        float targetY = visibleSize.height; // ç›®æ ‡ä½ç½®çš„Yåæ ‡
 
         auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
         auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, HelpScene::create(), Color3B::BLACK)); // ÇĞ»»µ½ĞÂ³¡¾°
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, HelpScene::create(), Color3B::BLACK)); // åˆ‡æ¢åˆ°æ–°åœºæ™¯
             });
         auto sequence = Sequence::create(moveUp, callback, nullptr);
         maskLayer->runAction(sequence);
         });
     this->addChild(helpButton, 1);
 
-    /* ½øÈë»¬¶¯Ñ¡¹Ø²¿·Ö */ 
+    /* åŠ è½½å…³å¡é€‰æ‹©ç•Œé¢ */ 
     SelectScene::scroll();
 
     return true;
@@ -94,29 +95,29 @@ bool SelectScene::init()
 
 void SelectScene::scroll()
 {
-    // »ñÈ¡ÆÁÄ»´óĞ¡
+    // è·å–å±å¹•å¤§å°
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    int numLevels = 5; // ÎåÕÅµØÍ¼
+    int numLevels = 5; // å…³å¡æ•°é‡
 
-    Button*  startButton = ui::Button::create("SelectScene/stages_bg-hd_30.PNG", "SelectScene/stages_bg-hd_28.PNG"); // ´´½¨°´Å¥
+    Button*  startButton = ui::Button::create("SelectScene/stages_bg-hd_30.PNG", "SelectScene/stages_bg-hd_28.PNG"); // æŒ‰é’®
 
-    // ´´½¨ PageView
+    // åˆ›å»ºPageView
     auto pageView = ui::PageView::create();
     pageView->setContentSize(visibleSize);
     pageView->setPosition(origin);
     pageView->setTag(TAG_PAGE_VIEW);
     this->addChild(pageView);
 
-    // Ñ­»·´òÓ¡¹Ø¿¨Ô¤ÀÀÍ¼²¢¼ÓÈë»¬¶¯ÈİÆ÷
+    // å¾ªç¯åˆ›å»ºå…³å¡ç•Œé¢
     for (int i = 0; i < numLevels; i++) {
-        // ÉèÖÃÒ³ÃæÕ¹Ê¾ÈİÆ÷
+        // åˆ›å»ºå…³å¡ç•Œé¢å¸ƒå±€
         auto layout = Layout::create();
         layout->setContentSize(Size(visibleSize.width, visibleSize.height));
-        layout->setTag(TAG_LEVEL_1 + i); // ÉèÖÃ²»Í¬µÄ±êÇ©
+        layout->setTag(TAG_LEVEL_1 + i); // ä½¿ç”¨ä¸åŒtagæ ‡è¯†ä¸åŒå…³å¡
 
-        // Ìí¼Ó¹Ø¿¨Í¼Æ¬
+        // åŠ è½½å…³å¡å›¾ç‰‡
         char level[30] = "SelectScene/Level_1.PNG";
         level[18] = '1' + i;
         auto levelImage = ImageView::create(level);
@@ -124,32 +125,32 @@ void SelectScene::scroll()
         levelImage->setPosition(Vec2(layout->getContentSize().width / 2, layout->getContentSize().height / 2 + 30));
         layout->addChild(levelImage);
      
-        // Ìí¼ÓÊÇ·ñËø¶¨
+        // åˆ¤æ–­æ˜¯å¦è§£é”
         if (i >= 2 || (i == 1 && !isLevel1Finish)) {
-            // ´´½¨ËøµÄÍ¼°¸
+            // åŠ è½½é”å®šå›¾ç‰‡
             auto lock = ImageView::create("SelectScene/stages_bg-hd_31.PNG");
             lock->setTag(TAG_LOCK_IMAGE);
             lock->setPosition(Vec2(layout->getContentSize().width / 2 + 140, layout->getContentSize().height / 2 - 70));
             layout->addChild(lock);
         }
 
-        // Ìí¼ÓÊÇ·ñÍê³É¹Ø¿¨
+        // åˆ¤æ–­æ˜¯å¦é€šå…³
         if (i == 0 && isLevel1Finish || i == 1 && isLevel2Finish) {
-            // ´´½¨Íê³ÉµÄÍ¼°¸
+            // åŠ è½½é€šå…³å›¾ç‰‡
             auto finish = ImageView::create("SelectScene/finish.png");
             finish->setTag(TAG_FINISH_IMAGE);
             finish->setPosition(Vec2(layout->getContentSize().width / 2 + 150, layout->getContentSize().height / 2 - 50));
             layout->addChild(finish);
         }
 
-        // ½«Ã¿Ò»ÕÅÍ¼Ìí¼Óµ½»¬¶¯Ò³ÃæÉÏ
+        // å°†å…³å¡ç•Œé¢æ·»åŠ åˆ°PageView
         pageView->addPage(layout);
     }
 
-    // ³õÊ¼»¯£¬Ê¹µÚÒ»Ò³³ÉÎªµ±Ç°Ò³
+    // åˆå§‹åŒ–æ—¶é»˜è®¤æ˜¾ç¤ºç¬¬ä¸€å…³
     this->updateLevelState(pageView->getCurrentPageIndex());
 
-    // ÉèÖÃ PageView ÊÂ¼ş¼àÌıÆ÷£¬¼àÌıÒ³Ãæ±ä»¯£¬¸üĞÂ¹Ø¿¨×´Ì¬
+    // PageViewç›‘å¬äº‹ä»¶ï¼Œç›‘å¬é¡µé¢å˜åŒ–ï¼Œæ›´æ–°å…³å¡çŠ¶æ€
     pageView->addEventListener([this](Ref* sender, ui::PageView::EventType type) {
         if (type == ui::PageView::EventType::TURNING) {
             auto pageView = dynamic_cast<PageView*>(sender);
@@ -158,10 +159,10 @@ void SelectScene::scroll()
         }
         });
 
-    // ´´½¨¿ªÊ¼ÓÎÏ·°´Å¥
-    startButton->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 240)); // °´Å¥Î»ÖÃÔÚÒ³Ãæµ×²¿
+    // åˆå§‹åŒ–æ—¶æ˜¾ç¤ºå¼€å§‹æŒ‰é’®
+    startButton->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 240)); // æŒ‰é’®ä½ç½®åœ¨é¡µé¢åº•éƒ¨
     startButton->setTag(TAG_START_BUTTON);
-    // µã»÷°´Å¥ÊÂ¼ş
+    // æŒ‰é’®ç›‘å¬äº‹ä»¶
     startButton->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
         if (type == Widget::TouchEventType::ENDED)
         {
@@ -171,25 +172,25 @@ void SelectScene::scroll()
     this->addChild(startButton, 2);
 }
 
-/* ¼àÌıÒ³Ãæ±ä»¯£¬¸üĞÂ¹Ø¿¨×´Ì¬ */
+/* æ›´æ–°å…³å¡çŠ¶æ€ */
 void SelectScene::updateLevelState(int pageIndex)
 {
     auto pageView = dynamic_cast<ui::PageView*>(this->getChildByTag(TAG_PAGE_VIEW));
     int i = 0;
 
-    /* ¶ÔµØÍ¼µÄÍ¸Ã÷¶È½øĞĞ¸üĞÂ */
+    /* éå†æ‰€æœ‰å…³å¡ç•Œé¢ï¼Œæ›´æ–°å›¾ç‰‡é€æ˜åº¦ */
     for (auto& item : pageView->getChildren()) {
         auto layout = dynamic_cast<ui::Layout*>(item);
         auto levelImage = dynamic_cast<ui::ImageView*>(layout->getChildByTag(TAG_LEVEL_IMAGE));
-        // ¸ù¾İÊÇ·ñÊÇµ±Ç°Ò³ÃæÀ´ÉèÖÃÍ¸Ã÷¶È
+        // åˆ¤æ–­æ˜¯å¦å½“å‰é¡µé¢ï¼Œæ›´æ–°å›¾ç‰‡é€æ˜åº¦
         levelImage->setOpacity(layout->getTag() == (TAG_LEVEL_1 + pageIndex) ? 255 : 50);
 
-        // ËøµÄÍ¸Ã÷¶È±ä»¯
+        // å…¶ä»–å›¾ç‰‡é€æ˜åº¦ä¸å˜
         if (i >= 2 || (i == 1 && !isLevel1Finish)) {
             auto lock = dynamic_cast<ui::ImageView*>(layout->getChildByTag(TAG_LOCK_IMAGE));
             lock->setOpacity(layout->getTag() == (TAG_LEVEL_1 + pageIndex) ? 255 : 50);
         }
-        // Íê³É±êÖ¾µÄÍ¸Ã÷¶È±ä»¯
+        // å…¶ä»–å›¾ç‰‡é€æ˜åº¦ä¸å˜
         if (i == 0 && isLevel1Finish || i == 1 && isLevel2Finish) {
             auto finish = dynamic_cast<ui::ImageView*>(layout->getChildByTag(TAG_FINISH_IMAGE));
             finish->setOpacity(layout->getTag() == (TAG_LEVEL_1 + pageIndex) ? 255 : 50);
@@ -197,11 +198,11 @@ void SelectScene::updateLevelState(int pageIndex)
         i++;
     }
 
-    /* ¶ÔÃ¿Ò»Ò³µÄ¹Ì¶¨²¿¼ş½øĞĞ¸üĞÂ */
-    // ¶¨Òå¹Ì¶¨²¿¼şµÄ±êÇ©
+    /* å›ºå®šéƒ¨åˆ†å›¾ç‰‡ */
+    // å›ºå®šéƒ¨åˆ†tag
     const int TAG_FIXED_PART = 1000;
 
-    // Ìí¼Ó¹Ì¶¨²¿¼ş£¬Ã¿¸öÒ³ÃæµÄ²¿¼ş¶¼²»Ò»Ñù
+    // åˆ›å»ºå›ºå®šéƒ¨åˆ†å›¾ç‰‡
     auto tower1 = ImageView::create("SelectScene/Tower_1.PNG");
     tower1->setTag(TAG_FIXED_PART);
     auto tower2 = ImageView::create("SelectScene/Tower_2.PNG");
@@ -217,7 +218,7 @@ void SelectScene::updateLevelState(int pageIndex)
     auto labelText2 = Label::createWithTTF("A total of 20 waves", "fonts/Marker Felt.ttf", 22);
     labelText2->setTag(TAG_FIXED_PART + 6);
 
-    // ÒÆ³ıÉÏÒ»´ÎÌí¼ÓµÄ¹Ì¶¨²¿¼ş
+    // åˆ é™¤å›ºå®šéƒ¨åˆ†æ‰€æœ‰å›¾ç‰‡
     for (int i = 0; i < 7; i++) {
         this->removeChildByTag(TAG_FIXED_PART + i);
     }
@@ -282,37 +283,21 @@ void SelectScene::updateLevelState(int pageIndex)
 
 }
 
-/* ½øÈëÓÎÏ·³¡¾° */
+/* è¿›å…¥æ¸¸æˆåœºæ™¯ */
 void SelectScene::gotoGameScene(Ref* sender)
 {
-     // »ñÈ¡ÆÁÄ»´óĞ¡
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-
-    // ´´½¨ÕÚÕÖ²ã
-    auto maskLayer = LayerColor::create(Color4B(0, 0, 0, 0));  // Í¸Ã÷µÄÕÚÕÖ²ã
-    this->addChild(maskLayer);
-
-    float duration = 0.1f; // ¶¯»­µÄ³ÖĞøÊ±¼ä
-    float targetY = visibleSize.height; // Ä¿±êÎ»ÖÃµÄY×ø±ê
-
-    auto moveUp = MoveTo::create(duration, Vec2(0, targetY));
-    ///////////////////////////////////////////////////
-    auto pageView = dynamic_cast<ui::PageView*>(this->getChildByTag(TAG_PAGE_VIEW));
-    if (int pageIndex = pageView->getCurrentPageIndex() == 0)
-    {
-        auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, Level1Scene::create(), Color3B::BLACK)); // ÇĞ»»µ½µÚÒ»¹Ø
-            });
-        auto sequence = Sequence::create(moveUp, callback, nullptr);
-        maskLayer->runAction(sequence);
+    auto button = dynamic_cast<Button*>(sender);
+    int levelNum = button->getTag();
+    
+    /*Refactored with Factory Pattern*/
+    // ä½¿ç”¨å·¥å‚åˆ›å»ºå…³å¡
+    auto level = LevelFactory::createLevel(levelNum);
+    if (level) {
+        Director::getInstance()->replaceScene(
+            TransitionFade::create(0.5f, level, Color3B::BLACK)
+        );
+    } else {
+        // ç»Ÿä¸€çš„é”™è¯¯å¤„ç†
+        CCLOG("Failed to create level %d", levelNum);
     }
-    else if(int pageIndex = pageView->getCurrentPageIndex() == 1 && isLevel1Finish)
-    {
-        auto callback = CallFunc::create([]() {
-            Director::getInstance()->replaceScene(TransitionFade::create(0.5f, Level2Scene::create(), Color3B::BLACK)); // ÇĞ»»µ½µÚ¶ş¹Ø
-            });
-        auto sequence = Sequence::create(moveUp, callback, nullptr);
-        maskLayer->runAction(sequence);
-    }
-
 }

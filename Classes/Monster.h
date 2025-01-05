@@ -32,11 +32,11 @@ public:
     float getMoveSpeed() const { return speed; }
     void setMoveSpeed(float newSpeed) { speed = newSpeed; }
 
-    CC_SYNTHESIZE_READONLY(int, _hitPoints, HitPoints); // Ê¹ÓÃ CC_SYNTHESIZE_READONLY ºêÀ´´´½¨ getter ·½·¨
+    CC_SYNTHESIZE_READONLY(int, _hitPoints, HitPoints);    // ä½¿ç”¨ CC_SYNTHESIZE_READONLY å®ç”Ÿæˆ getter æ–¹æ³•
     CC_SYNTHESIZE_READONLY(int, _monsterType, MonsterType);
-    CC_SYNTHESIZE_READONLY(cocos2d::Label*, _hpLabel, HPLabel); // ÉúÃüÖµÏÔÊ¾
+    CC_SYNTHESIZE_READONLY(cocos2d::Label*, _hpLabel, HPLabel); // è¡€é‡å€¼æ˜¾ç¤º
 
-    // ×´Ì¬Ïà¹ØµÄĞÂÔöÄÚÈİ
+    // çŠ¶æ€ç›¸å…³çš„æ–¹æ³•å£°æ˜
     void changeState(MonsterState* newState);
     MonsterState* getCurrentState() const { return currentState; }
     virtual void update(float dt) override;
@@ -50,7 +50,7 @@ private:
     void updateHPLabel();
     void die();
 
-    // ×´Ì¬Ïà¹ØµÄĞÂÔö³ÉÔ±
+    // çŠ¶æ€ç›¸å…³çš„æˆå‘˜å˜é‡
     MonsterState* currentState;
     cocos2d::Sprite* slowEffect = nullptr;
 };

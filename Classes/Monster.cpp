@@ -5,7 +5,7 @@
 using namespace cocos2d;
 USING_NS_CC;
 
-// Refactored with State Pattern
+/*Refactored with State Pattern*/
 Monster* Monster::createWithType(int monsterType) {
     int hitPoints = 100;
     switch (monsterType) {
@@ -40,10 +40,11 @@ bool Monster::init() {
         return false;
     }
 
-    // �������ͳ�ʼ����������
+    // 设置怪物图片
     std::string filename = "Monster/monster" + std::to_string(_monsterType) + ".png";
     this->initWithFile(filename);
 
+    /*Refactored with State Pattern*/
     // 初始化为行走状态
     currentState = new WalkState();
     currentState->enter(this);
@@ -54,7 +55,7 @@ bool Monster::init() {
     return true;
 }
 
-// 状态相关的新增方法
+/*Refactored with State Pattern*/
 void Monster::changeState(MonsterState* newState) {
     if (currentState) {
         currentState->exit(this);
@@ -168,6 +169,7 @@ void Monster::die() {
     this->setVisible(false);
 }
 
+/*Refactored with State Pattern*/
 // 新增：处理减速效果
 void Monster::handleSlowEffect(int damage) {
     if (!isAlive) return;

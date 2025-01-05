@@ -33,11 +33,11 @@ static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(960, 640);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
-Carrot* globalCarrot = nullptr; // ȫ�ֱ����Ķ���
+Carrot* globalCarrot = nullptr;
 CarrotView* globalCarrotView = nullptr;
 GoldCoin* goldCoin = nullptr;
 GoldCoinView* goldCoinView = nullptr;
-std::vector<Monster*> monsters; // 洢
+std::vector<Monster*> monsters;
 std::vector<Fan*> fans;
 std::vector<Bottle*> bottles;
 std::vector<Shit*> shits;

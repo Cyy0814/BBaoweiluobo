@@ -9,8 +9,8 @@ using namespace std;
 class GameScene : public Scene
 {
 private:
-    LayerColor* maskLayer;      // ÃÉ°æ,Ìí¼ÓÔÚÀàÄÚÊÇÎªÁËÆÁ±ÎÔİÍ£Ê±¶ÔµØÍ¼µÄ²Ù×÷
-    bool isGamePaused = false;  // ¸ú×ÙÔİÍ£×´Ì¬
+    LayerColor* maskLayer;      // é®ç½©,ç”¨äºå¤„ç†æš‚åœæ—¶å¯¹åœ°å›¾çš„æ“ä½œ
+    bool isGamePaused = false;  // æ¸¸æˆæš‚åœçŠ¶æ€
 public:
     static Scene* createScene();
 
@@ -26,38 +26,38 @@ public:
 class GameMap : public Layer
 {
 public:
-    // ³õÊ¼»¯·½·¨
+    // åˆå§‹åŒ–ç½‘æ ¼
     virtual bool init();
 
-    // ¹Ø¿¨
+    // å…³å¡
     int level;
 
-    // ¶¨ÒåÍø¸ñ´óĞ¡ 12X8
+    // ç½‘æ ¼å¤§å° 12X8
     static const int GRID_WIDTH = 12;
     static const int GRID_HEIGHT = 8;
 
-    // ¸ñ×Ó½á¹¹
+    // ç½‘æ ¼ç»“æ„
     struct Grid {
         int x, y;
     };
 
-    // ´´½¨¸ñ×Ó
+    // ç½‘æ ¼æ•°ç»„
     vector<vector<bool>> gridMap;
 
-    // ´æ´¢Â·¾¶
+    // å­˜å‚¨è·¯å¾„
     vector<Grid> path;
 
-    // ×ª»»º¯Êı£¬½«Íø¸ñ×ø±ê×ª»»ÎªÏñËØ×ø±ê
+    // è½¬æ¢å‡½æ•°ï¼šç½‘æ ¼åæ ‡è½¬æ¢ä¸ºåƒç´ åæ ‡
     Vec2 gridToPixel(int x, int y);
 
-    // Äæ×ª»»º¯Êı£¬½«ÏñËØ×ø±ê×ª»»ÎªÍø¸ñ×ø±ê
+    // åè½¬æ¢ï¼šåƒç´ åæ ‡è½¬æ¢ä¸ºç½‘æ ¼åæ ‡
     Grid pixelToGrid(float x, float y);
 
-    // ·½·¨À´³õÊ¼»¯Íø¸ñºÍÂ·¾¶
+    // è®¾ç½®ç½‘æ ¼åˆå§‹åŒ–å¹¶è®¾ç½®è·¯å¾„
     void setupGrid();
     void addPathPoint(Grid g);
 
-    // ´òÓ¡·ÅÖÃÅÚÌ¨µÄÎ»ÖÃ
+    // æ‰“å°å¯æ”¾ç½®é˜²å¾¡å¡”çš„ä½ç½®
     void printStartSprite();
 
     CREATE_FUNC(GameMap);

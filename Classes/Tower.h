@@ -5,10 +5,10 @@
 #include "Monster.h"
 #include "TowerState.h"
 #include "ui/CocosGUI.h"
+#include "IAttackStrategy.h"
 using namespace cocos2d;
 using namespace cocos2d::ui;
 
-// Refactored with State Pattern
 class Tower : public cocos2d::Sprite {
 protected:
     int level;
@@ -18,6 +18,7 @@ protected:
     float timeSinceLastAttack;
     int attackDamage;
     TowerState* currentState;
+    IAttackStrategy* attackStrategy;
     
     std::vector<Monster*> monstersInRange;
     cocos2d::ui::Button* upgradeButton;
@@ -31,6 +32,7 @@ public:
     static Tower* create(cocos2d::Vec2 position, int towerType);
     virtual bool init() override;
     
+    /*Refactored with State Pattern*/
     // 状态相关
     void changeState(TowerState* newState);
     TowerState* getCurrentState() const { return currentState; }
@@ -52,5 +54,15 @@ public:
     
     // 更新函数
     virtual void update(float dt, std::vector<Monster*> monsters);
+
+    /*Refactored with Strategy Pattern*/
+    // 攻击策略
+    void setAttackStrategy(IAttackStrategy* strategy) {
+        if (attackStrategy) {
+            delete attackStrategy;
+        }
+        attackStrategy = strategy;
+    }
 };
+
 #endif

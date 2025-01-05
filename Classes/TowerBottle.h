@@ -12,7 +12,7 @@ class Bottle : public Tower {
 public:
     static Bottle* create(const cocos2d::Vec2& position);
 
-    // ¹¥»÷Ïà¹ØÂß¼­
+    // æ”»å‡»ç›¸å…³é€»è¾‘
     void update(float dt, std::vector<Monster*> monsters);
     bool isMonsterInRange(Monster* monster);
     void checkForMonstersInRange(std::vector<Monster*> monsters);
@@ -20,13 +20,13 @@ public:
 
     void upgrade();
     void remove() override;
-    void showAttackRange()override; // ÏÔÊ¾¹¥»÷·¶Î§
-    void showUpgradeAndRemoveButtons()override; // ÏÔÊ¾Éı¼¶ºÍÒÆ³ı°´Å¥
-    void hideAttackRangeAndButtons(); // ÒÆ³ı
+    void showAttackRange()override; // æ˜¾ç¤ºæ”»å‡»èŒƒå›´
+    void showUpgradeAndRemoveButtons()override; // æ˜¾ç¤ºå‡çº§å’Œç§»é™¤æŒ‰é’®
+    void hideAttackRangeAndButtons(); // ç§»é™¤
 
 private:
-    cocos2d::ui::Button *upgradeButton; // Éı¼¶°´Å¥
-    cocos2d::ui::Button *removeButton;  // ÒÆ³ı°´Å¥
+    cocos2d::ui::Button *upgradeButton; // å‡çº§æŒ‰é’®
+    cocos2d::ui::Button *removeButton;  // ç§»é™¤æŒ‰é’®
     Sprite* attackRange_;
 };
 

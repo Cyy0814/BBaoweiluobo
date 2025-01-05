@@ -3,7 +3,7 @@
 #include "Level1.h"
 #include "cocos2d.h"
 #include "Bottle.h"
-#include "Tower.h"// ÒıÈëÅÚËşÏà¹ØµÄÍ·ÎÄ¼ş
+#include "Tower.h"// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Í·ï¿½Ä¼ï¿½
 
 class PickTower : public cocos2d::Node {
 public:
@@ -21,9 +21,9 @@ private:
     Sprite* tower1Item;
     Sprite* tower2Item;
     Sprite* tower3Item;
-    cocos2d::Node* menu;                  // Ñ¡Ôñ²Ëµ¥
-    cocos2d::Vec2 selectedPosition;       // µ±Ç°Ñ¡ÖĞµÄÎ»ÖÃ
-    std::vector<cocos2d::Vec2> Positions; // ¿Éµã»÷µÄÎ»ÖÃ
+    cocos2d::Node* menu;                  // é€‰æ‹©èœå•
+    cocos2d::Vec2 selectedPosition;       // å½“å‰é€‰æ‹©çš„ä½ç½®
+    std::vector<cocos2d::Vec2> Positions; // å¯ç‚¹å‡»çš„ä½ç½®
 };
 
 

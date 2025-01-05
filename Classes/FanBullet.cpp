@@ -26,34 +26,41 @@ void FanBullet::moveToTarget() {
         return;
     }
 
-    // ´´½¨¶¨Ê±Æ÷£¬²»¶Ï¸üĞÂ×Óµ¯µÄ·ÉĞĞ·½Ïò
+    // æ›´æ–°å­å¼¹çš„é£è¡Œæ–¹å‘å’Œä½ç½®
+    // è®¡ç®—æ–°çš„æ–¹å‘å’Œä½ç½®
+    // å­å¼¹æ—‹è½¬
+    // æ¯å¸§æ—‹è½¬5åº¦ï¼Œå¯ä»¥è°ƒæ•´æ—‹è½¬é€Ÿåº¦
+    // å½“å­å¼¹æ¥è¿‘ç›®æ ‡
+    // å¯¹æ€ªç‰©é€ æˆä¼¤å®³
+    // æ›´æ–°å­å¼¹çš„æ–¹å‘
+    // æ¯å¸§æ›´æ–°å­å¼¹ä½ç½®
     auto updateFunc = [this](float dt) {
         if (!this->getParent()) {
             this->unschedule("bullet_update");
             return;
         }
-        // ¼ÆËãĞÂµÄ·½ÏòºÍÎ»ÖÃ
+        // ÂµÄ·Î»
         Vec2 direction = target->getPosition() - this->getPosition();
         float distance = direction.length();
-        // ×Óµ¯Ğı×ª
-        this->setRotation(this->getRotation() + 5.0f); // Ã¿Ö¡Ğı×ª5¶È£¬¿ÉÒÔµ÷ÕûĞı×ªËÙ¶È
-        if (distance < 10.0f) { // Èç¹û×Óµ¯½Ó½üÄ¿±ê
-            target->getAttacked(damage); // ¶Ô¹ÖÎïÔì³ÉÉËº¦
+        // ï¿½Óµï¿½ï¿½ï¿½×ª
+        this->setRotation(this->getRotation() + 5.0f); // Ã¿Ö¡ï¿½ï¿½×ª5ï¿½È£ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Ù¶ï¿½
+        if (distance < 10.0f) { // ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½Ó½ï¿½Ä¿ï¿½ï¿½
+            target->getAttacked(damage); // ï¿½Ô¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½
             this->stopAllActions();
             this->removeFromParent();
         }
         else if (target) {
-            // ¸üĞÂ×Óµ¯µÄ·½Ïò
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½Ä·ï¿½ï¿½ï¿½
             direction.normalize();
             this->setPosition(this->getPosition() + direction * speed * dt);
         }
     };
 
-    // Ã¿Ö¡µ÷ÓÃ updateFunc À´¸üĞÂ×Óµ¯Î»ÖÃ
+    // Ã¿Ö¡ï¿½ï¿½ï¿½ï¿½ updateFunc ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Î»ï¿½ï¿½
     this->schedule(updateFunc, "bullet_update");
 }
 
 //void Bullet::targetDied() {
-//    target = nullptr; // ½«Ä¿±êÉèÖÃÎª nullptr
-//    // »òÕß²ÉÈ¡ÆäËûÊÊµ±µÄĞĞ¶¯
+//    target = nullptr; // ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª nullptr
+//    // ï¿½ï¿½ï¿½ß²ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ğ¶ï¿½
 //}

@@ -28,10 +28,10 @@ void Carrot::setHealth(int value) {
         if (health < 0) health = 0;
         if (health > MAX_HEALTH) health = MAX_HEALTH;
         
-        // Í¨ÖªËùÓĞ¹Û²ìÕß½¡¿µÖµ·¢Éú±ä»¯
+        // é€šçŸ¥è§‚å¯Ÿè€…å¥åº·å‘ç”Ÿå˜åŒ–
         notifyObservers("health_changed", health);
         
-        // ÈÃµ±Ç°×´Ì¬´¦ÀíÑªÁ¿±ä»¯
+        // å¤„ç†å¥åº·å˜åŒ–
         if (currentState) {
             currentState->handleHealthChange(this, health);
         }
@@ -48,7 +48,7 @@ void Carrot::changeState(CarrotState* newState) {
     }
     currentState = newState;
     
-    // Í¨Öª¹Û²ìÕß×´Ì¬·¢Éú±ä»¯
+    // é€šçŸ¥è§‚å¯Ÿè€…çŠ¶æ€å‘ç”Ÿå˜åŒ–
     notifyObservers("state_changed", health);
 }
 

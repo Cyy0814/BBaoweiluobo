@@ -26,34 +26,25 @@ void ShitBullet::moveToTarget() {
         return;
     }
 
-    // ´´½¨¶¨Ê±Æ÷£¬²»¶Ï¸üĞÂ×Óµ¯µÄ·ÉĞĞ·½Ïò
+    // æ›´æ–°å­å¼¹çš„é£è¡Œæ–¹å‘
     auto updateFunc = [this](float dt) {
-        if (!this->getParent()) {
-            this->unschedule("bullet_update");
-            return;
-        }
-        // ¼ÆËãĞÂµÄ·½ÏòºÍÎ»ÖÃ
+        // è®¡ç®—æ–°çš„æ–¹å‘å’Œä½ç½®
         Vec2 direction = target->getPosition() - this->getPosition();
         float distance = direction.length();
-        // ×Óµ¯Ğı×ª
-        if (distance < 10.0f) { // Èç¹û×Óµ¯½Ó½üÄ¿±ê
-            // target->getAttacked(damage); // ¶Ô¹ÖÎïÔì³ÉÉËº¦
-            /****1/2¸üĞÂ ¹ÖÎïÊÜ¹¥»÷ÌØĞ§*****************************/
-            // target->beSloweddown();
+        // å­å¼¹æ—‹è½¬
+        if (distance < 10.0f) { // å½“å­å¼¹æ¥è¿‘ç›®æ ‡
 
-            // Refactored with State Pattern
+            /*Refactored with State Pattern*/
             target->handleSlowEffect(damage);
-            /*******************************************************/
+            
             this->stopAllActions();
             this->removeFromParent();
         }
-        else if (target) {
-            // ¸üĞÂ×Óµ¯µÄ·½Ïò
-            direction.normalize();
-            this->setPosition(this->getPosition() + direction * speed * dt);
-        }
+        // æ›´æ–°å­å¼¹çš„æ–¹å‘
+        direction.normalize();
+        this->setPosition(this->getPosition() + direction * speed * dt);
     };
 
-    // Ã¿Ö¡µ÷ÓÃ updateFunc À´¸üĞÂ×Óµ¯Î»ÖÃ
+    // æ¯å¸§ updateFunc æ›´æ–°ä½ç½®
     this->schedule(updateFunc, "bullet_update");
 }

@@ -14,7 +14,7 @@ public:
     void upgrade();
     void remove() override;
 
-    // ��������߼�
+    // 攻击相关逻辑
     void update(float dt, std::vector<Monster*> monsters);
     void attack(Monster* target);
 

@@ -12,19 +12,19 @@
 #include "Shit.h"
 
 
-extern Carrot* globalCarrot; // ȫ�ֱ���������
-extern GoldCoin* goldCoin; // ���ϵͳ
+extern Carrot* globalCarrot;      // 全局变量胡萝卜
+extern GoldCoin* goldCoin;        // 金币系统
 extern CarrotView* globalCarrotView;
 extern GoldCoinView* goldCoinView;
 
-extern std::vector<Monster*> monsters; // 洢
+extern std::vector<Monster*> monsters; // 存储怪物
 
-// 潨̨
+// 防御塔
 extern std::vector<Fan*> fans;
 extern std::vector<Bottle*> bottles;
 extern std::vector<Shit*> shits;
 
-// ��¼�Ƿ���ɹؿ�
+// 记录是否完成关卡
 extern bool isLevel1Finish;
 extern bool isLevel2Finish;
 

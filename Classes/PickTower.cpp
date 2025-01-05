@@ -25,90 +25,53 @@ bool PickTower::initWithPositions(const std::vector<cocos2d::Vec2>& positions) {
         return false;
     }
 
-    // ±£´æ´«ÈëµÄÎ»ÖÃ
+    // ä¿å­˜ä¼ å…¥çš„ä½ç½®
     Positions = positions;
 
-    // ³õÊ¼»¯Ñ¡Ôñ²Ëµ¥£¨ÕâÀïÖ»ÊÇ¼ò»¯µÄÊµÏÖ£¬¾ßÌåĞèÒª¸ù¾İÄãµÄUIĞèÇóµ÷Õû£©
+    // åˆå§‹åŒ–é€‰æ‹©èœå•ï¼ˆè¿™åªæ˜¯ç®€åŒ–çš„å®ç°ï¼Œå¯èƒ½éœ€è¦æ›´ç²¾ç¾çš„UIå’ŒåŠ¨ç”»ï¼‰
     menu = Node::create();
     auto click = Sprite::create("GameScene/click.png");
-    tower1Item = Sprite::create("Tower/Bottle/CanClick1.PNG"); // Ëş1µÄÍ¼±ê
-    tower2Item = Sprite::create("Tower/Fan/CanClick1.PNG");    // Ëş2µÄÍ¼±ê
-    tower3Item = Sprite::create("Tower/Shit/CanClick1.PNG");    // Ëş3µÄÍ¼±ê
-    click->setPosition(Director::getInstance()->getVisibleOrigin() / 2); // µã»÷ÉÁË¸
-    // Ìí¼Óµ½menu
+    tower1Item = Sprite::create("Tower/Bottle/CanClick1.PNG"); // å¡”1å›¾æ ‡
+    tower2Item = Sprite::create("Tower/Fan/CanClick1.PNG");    // å¡”2å›¾æ ‡
+    tower3Item = Sprite::create("Tower/Shit/CanClick1.PNG");   // å¡”3å›¾æ ‡
+    click->setPosition(Director::getInstance()->getVisibleOrigin() / 2); // é—ªçƒ
+
+    // æ·»åŠ åˆ°menu
     menu->addChild(click);
     menu->addChild(tower1Item);
     menu->addChild(tower2Item);
     menu->addChild(tower3Item);
 
+    // æ·»åŠ ç‚¹å‡»ä½ç½®çš„ç›‘å¬å™¨
+    auto listener = EventListenerTouchOneByOne::create();
+
+    // ä¸ºæ¯ä¸ªé˜²å¾¡å¡”é€‰é¡¹æ·»åŠ è§¦æ‘¸äº‹ä»¶ç›‘å¬å™¨
+    auto createTowerBottleListener = EventListenerTouchOneByOne::create();
+    createTowerBottleListener->setSwallowTouches(true); // åå™¬äº‹ä»¶
+
+    // éšè—èœå•
     menu->setVisible(false);
-    this->addChild(menu);
 
     tower1Item->setPosition(Vec2(-80, 80));
     tower2Item->setPosition(Vec2(0, 80));
     tower3Item->setPosition(Vec2(80, 80));
 
-    // Ìí¼Óµã»÷Î»ÖÃµÄ¼àÌıÆ÷
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(PickTower::onTouchBegan, this);
+    // æ·»åŠ åˆ°menu
+    this->addChild(menu);
+
+    // æ·»åŠ åˆ°event dispatcher
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    // ÎªÃ¿¸öÅÚËşÑ¡ÏîÌí¼Ó´¥ÃşÊÂ¼ş¼àÌıÆ÷
-    auto createTowerBottleListener = EventListenerTouchOneByOne::create();
-    createTowerBottleListener->setSwallowTouches(true); // ÍÌÊÉ´¥ÃşÊÂ¼ş
-    createTowerBottleListener->onTouchBegan = [this](Touch* touch, Event* event) {
-        Vec2 touchLocation = touch->getLocation();
-        Vec2 localLocation = tower1Item->getParent()->convertToNodeSpace(touchLocation);
-
-        if (tower1Item->getBoundingBox().containsPoint(localLocation)) {
-
-            createTowerBottle(selectedPosition);
-            goldCoin->purchaseTower(100);
-
-            menu->setVisible(false); // Òş²Ø²Ëµ¥
-            return true;
-        }
-        return false;
-    };
+    // ä¸ºæ¯ä¸ªé˜²å¾¡å¡”é€‰é¡¹æ·»åŠ è§¦æ‘¸äº‹ä»¶ç›‘å¬å™¨
     _eventDispatcher->addEventListenerWithSceneGraphPriority(createTowerBottleListener, tower1Item);
 
     auto createTowerFanListener = EventListenerTouchOneByOne::create();
-    createTowerFanListener->setSwallowTouches(true); // ÍÌÊÉ´¥ÃşÊÂ¼ş
-    createTowerFanListener->onTouchBegan = [this](Touch* touch, Event* event) {
-        Vec2 touchLocation = touch->getLocation();
-        Vec2 localLocation = tower2Item->getParent()->convertToNodeSpace(touchLocation);
-
-        if (tower2Item->getBoundingBox().containsPoint(localLocation)) {
-
-            createTowerFan(selectedPosition);
-            goldCoin->purchaseTower(160);
-
-            menu->setVisible(false); // Òş²Ø²Ëµ¥
-            return true;
-        }
-        return false;
-    };
+    createTowerFanListener->setSwallowTouches(true); // åå™¬äº‹ä»¶
     _eventDispatcher->addEventListenerWithSceneGraphPriority(createTowerFanListener, tower2Item);
 
-    // ÎªÃ¿¸öÅÚËşÑ¡ÏîÌí¼Ó´¥ÃşÊÂ¼ş¼àÌıÆ÷
     auto createTowerShitListener = EventListenerTouchOneByOne::create();
-    createTowerShitListener->setSwallowTouches(true); // ÍÌÊÉ´¥ÃşÊÂ¼ş
-    createTowerShitListener->onTouchBegan = [this](Touch* touch, Event* event) {
-        Vec2 touchLocation = touch->getLocation();
-        Vec2 localLocation = tower3Item->getParent()->convertToNodeSpace(touchLocation);
-
-        if (tower3Item->getBoundingBox().containsPoint(localLocation)) {
-
-            createTowerShit(selectedPosition);
-            goldCoin->purchaseTower(120);
-
-            menu->setVisible(false); // Òş²Ø²Ëµ¥
-            return true;
-        }
-        return false;
-    };
+    createTowerShitListener->setSwallowTouches(true); // åå™¬äº‹ä»¶
     _eventDispatcher->addEventListenerWithSceneGraphPriority(createTowerShitListener, tower3Item);
-
 
     return true;
 }
@@ -130,34 +93,33 @@ bool PickTower::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event) {
 }
 
 void PickTower::showMenuAtPosition(const cocos2d::Vec2& position) {
-
-    // ÏÔÊ¾²Ëµ¥²¢ÉèÖÃÎ»ÖÃ
+    // è®¾ç½®èœå•çš„ä½ç½®
     menu->setPosition(position);
-    menu->setVisible(true); 
+    menu->setVisible(true);
 }
 
-// ´´½¨ TowerBottle ÅÚËş²¢Ìí¼Ó´¥ÃşÊÂ¼ş¼àÌıÆ÷
+// åˆ›å»ºTowerBottle
 void PickTower::createTowerBottle(const cocos2d::Vec2& position) {
     auto towerBottle = Bottle::create(position);
     this->addChild(towerBottle);
     addTowerTouchListener(towerBottle);
 }
 
-// ´´½¨ TowerFan ÅÚËş²¢Ìí¼Ó´¥ÃşÊÂ¼ş¼àÌıÆ÷
+// åˆ›å»ºTowerFan
 void PickTower::createTowerFan(const cocos2d::Vec2& position) {
     auto towerFan = Fan::create(position);
     this->addChild(towerFan);
     addTowerTouchListener(towerFan);
 }
 
-// ´´½¨ TowerShit ÅÚËş²¢Ìí¼Ó´¥ÃşÊÂ¼ş¼àÌıÆ÷
+// åˆ›å»ºTowerShit
 void PickTower::createTowerShit(const cocos2d::Vec2& position) {
     auto towerShit = Shit::create(position);
     this->addChild(towerShit);
     addTowerTouchListener(towerShit);
 }
 
-// ÎªÅÚËşÌí¼Ó´¥ÃşÊÂ¼ş¼àÌıÆ÷µÄÍ¨ÓÃ·½·¨
+// æ·»åŠ è§¦æ‘¸äº‹ä»¶ç›‘å¬å™¨
 void PickTower::addTowerTouchListener(Tower* tower) {
     auto towerListener = EventListenerTouchOneByOne::create();
     towerListener->setSwallowTouches(true);
@@ -170,10 +132,9 @@ void PickTower::addTowerTouchListener(Tower* tower) {
         return false;
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(towerListener, tower);
-
 }
 
 bool PickTower::isPointNearLocation(const cocos2d::Vec2& point, const cocos2d::Vec2& location) {
-    // ¼òµ¥µÄ¾àÀë¼ì²â£¬¿ÉÒÔ¸ù¾İĞèÒªµ÷ÕûãĞÖµ
-    return point.distance(location) < 50.0f; // ¼ÙÉè50ÏñËØÎªµã»÷ÓĞĞ§¾àÀë
+    // è®¡ç®—è·ç¦»
+    return point.distance(location) < 50.0f; // 50åƒç´ ä¸ºæœ‰æ•ˆèŒƒå›´
 }
