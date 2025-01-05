@@ -21,6 +21,7 @@ public:
     void setHealth(int value);
     void decreaseHealth();
     
+    /*Refactored with State Pattern*/
     // 状态相关
     void changeState(CarrotState* newState);
     CarrotState* getCurrentState() const { return currentState; }

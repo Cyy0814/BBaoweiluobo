@@ -3,6 +3,12 @@
 
 #include "BaseLevelScene.h"
 
+/*Refactored with Factory Pattern*/
+/**
+ * @brief 第一关场景类
+ * 
+ * 继承自BaseLevelScene,实现第一关特有的设置
+ */
 class Level1Scene : public BaseLevelScene {
 public:
     static Scene* createScene();
