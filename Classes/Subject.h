@@ -4,7 +4,7 @@
 #include <vector>
 #include "Observer.h"
 
-// Refactored with Observer Pattern
+//---------------------------------refactored with observer pattern---------------------------------//
 class Subject {
 protected:
     std::vector<Observer*> observers;

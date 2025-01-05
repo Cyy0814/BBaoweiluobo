@@ -5,7 +5,7 @@
 using namespace cocos2d;
 USING_NS_CC;
 
-/*Refactored with State Pattern*/
+//---------------------------------refactored with state pattern---------------------------------//
 Monster* Monster::createWithType(int monsterType) {
     int hitPoints = 100;
     switch (monsterType) {

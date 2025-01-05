@@ -1,7 +1,7 @@
 #include "MonsterState.h"
 #include "Monster.h"
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 // WalkState实现
 void WalkState::enter(Monster* monster) {
     // 设置正常速度

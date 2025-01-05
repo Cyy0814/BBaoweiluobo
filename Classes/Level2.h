@@ -3,7 +3,7 @@
 
 #include "BaseLevelScene.h"
 
-/*Refactored with Factory Pattern*/
+//---------------------------------refactored with factory pattern---------------------------------//
 /**
  * @brief 第二关场景类
  * 

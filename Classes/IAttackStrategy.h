@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Monster.h"
 
+//---------------------------------refactored with strategy pattern---------------------------------//
 /**
  * @brief 攻击策略的抽象接口类
  * 定义了防御塔攻击行为的抽象接口

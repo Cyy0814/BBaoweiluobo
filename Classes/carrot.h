@@ -5,7 +5,7 @@
 #include "Subject.h"
 #include "CarrotState.h"
 
-// Refactored with Observer Pattern
+//---------------------------------refactored with observer pattern---------------------------------//
 class Carrot : public cocos2d::Node, public Subject {
 private:
     int health;
@@ -21,7 +21,7 @@ public:
     void setHealth(int value);
     void decreaseHealth();
     
-    /*Refactored with State Pattern*/
+    //---------------------------------refactored with state pattern---------------------------------//
     // 状态相关
     void changeState(CarrotState* newState);
     CarrotState* getCurrentState() const { return currentState; }

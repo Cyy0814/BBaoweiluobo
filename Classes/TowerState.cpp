@@ -2,7 +2,7 @@
 #include "Tower.h"
 #include "Monster.h"
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 // 待机状态实现
 void IdleState::enter(Tower* tower) {
     // Do nothing , Maybe play animation

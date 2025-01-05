@@ -25,7 +25,7 @@ Fan* Fan::create(const Vec2& position) {
         fan->timeSinceLastAttack = 0;
         fans.push_back(fan);
 
-        /*Refactored with Dependency Injection Pattern*/
+        //---------------------------------refactored with dependency injection pattern---------------------------------//
         // 注入攻击策略
         fan->setAttackStrategy(new FanAttackStrategy());
 
@@ -89,7 +89,7 @@ void Fan::remove()
     this->removeFromParentAndCleanup(true);
 }
 
-/*Refactored with Strategy Pattern*/
+//---------------------------------refactored with strategy pattern---------------------------------//
 void Fan::attack(Monster* target) {
     if(attackStrategy) {
         attackStrategy->attack(getPosition(), target, attackDamage);

@@ -34,7 +34,7 @@ public:
     static Tower* create(cocos2d::Vec2 position, int towerType);
     virtual bool init() override;
     
-    /*Refactored with State Pattern*/
+    //---------------------------------refactored with state pattern---------------------------------//
     // 状态相关
     void changeState(TowerState* newState);
     TowerState* getCurrentState() const { return currentState; }
@@ -57,7 +57,7 @@ public:
     // 更新函数
     virtual void update(float dt, std::vector<Monster*> monsters);
 
-    /*Refactored with Strategy Pattern*/
+    //---------------------------------refactored with strategy pattern---------------------------------//
     // 攻击策略
     void setAttackStrategy(IAttackStrategy* strategy) {
         if (attackStrategy) {

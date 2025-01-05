@@ -34,9 +34,9 @@ void ShitBullet::moveToTarget() {
         // 子弹旋转
         if (distance < 10.0f) { // 当子弹接近目标
 
-            /*Refactored with State Pattern*/
+            //---------------------------------refactored with state pattern---------------------------------//
             target->handleSlowEffect(damage);
-            
+
             this->stopAllActions();
             this->removeFromParent();
         }

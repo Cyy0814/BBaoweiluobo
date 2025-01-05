@@ -3,7 +3,7 @@
 #include "cocos/ui/UIImageView.h"
 #include "Tower.h"
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 USING_NS_CC;
 
 using namespace cocos2d::ui;
@@ -41,7 +41,7 @@ bool Tower::init() {
         return false;
     }
     
-    /*Refactored with State Pattern*/
+    //---------------------------------refactored with state pattern---------------------------------//
     // 设置初始状态为空闲
     // 启动update
     currentState = new IdleState();
@@ -53,7 +53,7 @@ bool Tower::init() {
     return true;
 }
 
-/*Refactored with State Pattern*/
+//---------------------------------refactored with state pattern---------------------------------//
 void Tower::changeState(TowerState* newState) {
     if (currentState) {
         currentState->exit(this);

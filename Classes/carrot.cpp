@@ -3,7 +3,7 @@ using namespace cocos2d;
 using namespace cocos2d::ui;
 USING_NS_CC;
 
-/*Refactored with State Pattern*/
+//---------------------------------refactored with state pattern---------------------------------//
 bool Carrot::init() {
     if (!Node::init()) {
         return false;
@@ -14,7 +14,7 @@ bool Carrot::init() {
     return true;
 }
 
-/*Refactored with Observer Pattern*/
+//---------------------------------refactored with observer pattern---------------------------------//
 Carrot::~Carrot() {
     if (currentState) {
         delete currentState;
@@ -42,7 +42,7 @@ void Carrot::decreaseHealth() {
     setHealth(health - 1);
 }
 
-/*Refactored with State Pattern*/
+//---------------------------------refactored with state pattern---------------------------------//
 void Carrot::changeState(CarrotState* newState) {
     if (currentState) {
         delete currentState;

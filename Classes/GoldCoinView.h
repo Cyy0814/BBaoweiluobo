@@ -5,7 +5,7 @@
 #include "Observer.h"
 #include "GoldCoin.h"
 
-// Refactored with Observer Pattern
+//---------------------------------refactored with observer pattern---------------------------------//
 class GoldCoinView : public cocos2d::Node, public Observer {
 private:
     cocos2d::Label* goldLabel;

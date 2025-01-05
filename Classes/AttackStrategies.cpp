@@ -6,12 +6,12 @@
 
 USING_NS_CC;
 
-/*Refactored with Strategy Pattern*/
+//---------------------------------refactored with strategy pattern---------------------------------//
 // 瓶子塔的攻击实现
 void BottleAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float damage) {
     if (!target || !target->getParent()) return;
     
-    /*Refactored with Flyweight Pattern*/
+    //---------------------------------refactored with flyweight pattern---------------------------------//
     // 使用享元工厂获取子弹
     Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
     
@@ -30,7 +30,7 @@ void FanAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float da
         return;
     }
     
-     /*Refactored with Flyweight Pattern*/
+    //---------------------------------refactored with flyweight pattern---------------------------------//
     // 使用享元工厂获取子弹
     Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Fan/ID1_0.PNG", attackSpeed, attackDamage);
     
@@ -47,7 +47,7 @@ void FanAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float da
 void ShitAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float damage) {
     if (!target || !target->getParent()) return;
     
-     /*Refactored with Flyweight Pattern*/
+    //---------------------------------refactored with flyweight pattern---------------------------------//
     // 使用享元工厂获取子弹
     Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Shit/ID2_43.PNG", attackSpeed, attackDamage);
     

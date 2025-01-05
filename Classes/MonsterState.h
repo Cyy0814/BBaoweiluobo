@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 
 class Monster;
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 // 怪物状态基类
 class MonsterState {
 public:

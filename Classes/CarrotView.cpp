@@ -2,6 +2,7 @@
 
 USING_NS_CC;
 
+//---------------------------------refactored with observer pattern---------------------------------//
 CarrotView* CarrotView::create(Carrot* carrot) {
     CarrotView* view = new (std::nothrow) CarrotView();
     if (view && view->init(carrot)) {
@@ -91,8 +92,8 @@ void CarrotView::updateHealthLabel(int health) {
     }
 }
 
-// Refactored with Observer Pattern
-// Refactored with State Pattern
+//---------------------------------refactored with observer pattern---------------------------------//
+//---------------------------------refactored with state pattern---------------------------------//
 void CarrotView::update(const std::string& message, int value) {
     if (message == "health_changed") {
         updateHealthLabel(value);

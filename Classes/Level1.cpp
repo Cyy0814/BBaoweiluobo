@@ -3,6 +3,7 @@
 #include "SingleWave.h"
 #include "Monster.h"
 
+//---------------------------------refactored with factory pattern---------------------------------//
 Scene* Level1Scene::createScene() {
     return Level1Scene::create();
 }
@@ -27,7 +28,7 @@ void Level1Scene::initPath(GameMap* gameMap) {
     }
 }
 
-/*Refactored with Composite Pattern*/
+//---------------------------------refactored with composite pattern---------------------------------//
 void Level1Scene::setupWaves() {
 
     for (int waveIndex = 0; waveIndex < getTotalWaves(); ++waveIndex) {

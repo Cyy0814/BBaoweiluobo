@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "BaseLevelScene.h"
 
+//---------------------------------refactored with factory pattern---------------------------------//
 /**
  * @brief 关卡工厂类
  * 

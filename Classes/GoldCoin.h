@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "Subject.h"
 
-/*Refactored with Observer Pattern*/
+//---------------------------------refactored with observer pattern---------------------------------//
 class GoldCoin : public cocos2d::Node, public Subject {
 private:
     int m_value;

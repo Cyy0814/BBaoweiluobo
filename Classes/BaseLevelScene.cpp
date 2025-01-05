@@ -5,6 +5,7 @@
 #include "PickTower.h"
 #include "Global.h"
 
+//---------------------------------refactored with factory pattern---------------------------------//
 bool BaseLevelScene::init() {
     if (!Scene::init()) {
         return false;
@@ -44,7 +45,7 @@ bool BaseLevelScene::init() {
     globalCarrot = Carrot::create();
     globalCarrot->setPosition(path[path.size() - 1]);
 
-    /*Refactored with Observer Pattern*/
+    //---------------------------------refactored with observer pattern---------------------------------//
     globalCarrotView = CarrotView::create(globalCarrot);
     this->addChild(globalCarrotView);
 
@@ -70,7 +71,7 @@ bool BaseLevelScene::init() {
     // 播放倒计时动画
     gameScene->createCountdownAnimation();
 
-    /*Refactored with composite Pattern*/
+    //---------------------------------refactored with composite pattern---------------------------------//
     // 初始化波数管理器
     waveManager = WaveManager::getInstance();
     setupWaves();    // 调用子类实现的波数设置

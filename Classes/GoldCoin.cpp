@@ -13,7 +13,7 @@ bool GoldCoin::init()
     return true;
 }
 
-/*Refactored with Observer Pattern*/
+//---------------------------------refactored with observer pattern---------------------------------//
 void GoldCoin::notifyGoldChanged()
 {
     notifyObservers("gold_changed", m_value);

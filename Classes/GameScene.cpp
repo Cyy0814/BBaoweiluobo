@@ -132,7 +132,7 @@ void GameScene::options()
             options->addChild(restartButton);
             restartButton->addClickEventListener([=](Ref*) {
 
-                /*Refactored with Factory Pattern*/
+                //---------------------------------refactored with factory pattern---------------------------------//
 
                 auto level = LevelFactory::createLevel(currentLevel);
                 if (level) {
@@ -335,7 +335,7 @@ void GameMap::printStartSprite()
 
 }
 
-/*Refactored with Factory Pattern*/
+//---------------------------------refactored with factory pattern---------------------------------//
 void GameScene::restartLevel() {
     // 使用工厂重新创建当前关卡
     auto level = LevelFactory::createLevel(currentLevel);

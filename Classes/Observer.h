@@ -3,7 +3,7 @@
 
 #include <string>
 
-// Refactored with Observer Pattern
+//---------------------------------refactored with observer pattern---------------------------------//
 class Observer {
 public:
     virtual void update(const std::string& message, int value) = 0;

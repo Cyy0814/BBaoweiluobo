@@ -1,7 +1,7 @@
 #include "CarrotState.h"
 #include "Carrot.h"
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 // 健康状态的状态转换
 void HealthyState::handleHealthChange(Carrot* carrot, int health) {
     if (health == 9) {

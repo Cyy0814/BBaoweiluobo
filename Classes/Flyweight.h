@@ -3,6 +3,7 @@
 
 #include "Monster.h"
 
+//---------------------------------refactored with flyweight pattern---------------------------------//
 class Flyweight {
 public:
     virtual void moveToTarget() = 0;

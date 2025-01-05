@@ -89,7 +89,7 @@ void Shit::remove()
     this->removeFromParentAndCleanup(true);
 }
 
-/*Refactored with Strategy Pattern*/
+//---------------------------------refactored with strategy pattern---------------------------------//
 void Shit::attack(Monster* target) {
     if(attackStrategy) {
         attackStrategy->attack(getPosition(), target, attackDamage);

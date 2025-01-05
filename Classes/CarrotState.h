@@ -5,7 +5,7 @@
 
 class Carrot;
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 // 萝卜状态基类
 class CarrotState {
 public:

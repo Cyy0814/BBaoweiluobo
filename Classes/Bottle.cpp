@@ -29,7 +29,7 @@ Bottle* Bottle::create(const Vec2& position) {
         bottle->timeSinceLastAttack = 0; // 设置上次攻击时间
         bottles.push_back(bottle);
 
-        /*Refactored with dependency injection Pattern*/
+        //---------------------------------refactored with dependency injection pattern---------------------------------//
         // 注入攻击策略
         bottle->setAttackStrategy(new BottleAttackStrategy());
         
@@ -119,7 +119,7 @@ void Bottle::update(float dt, std::vector<Monster*> monsters) {
     }
 }
 
-/*Refactored with Strategy Pattern*/
+//---------------------------------refactored with strategy pattern---------------------------------//
 void Bottle::attack(Monster* target) {
     if(attackStrategy) {
         attackStrategy->attack(getPosition(), target, attackDamage);

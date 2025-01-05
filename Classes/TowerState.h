@@ -7,7 +7,7 @@
 class Tower;
 class Monster;
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 // 塔的状态基类
 class TowerState {
 public:

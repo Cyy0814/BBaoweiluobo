@@ -40,7 +40,7 @@ void GoldCoinView::updateGoldLabel(int value) {
     }
 }
 
-// Refactored with Observer Pattern
+//---------------------------------refactored with observer pattern---------------------------------//
 void GoldCoinView::update(const std::string& message, int value) {
     if (message == "gold_changed") {
         updateGoldLabel(value);

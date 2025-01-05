@@ -9,6 +9,7 @@
 using namespace cocos2d;
 using namespace std;
 
+//---------------------------------refactored with factory pattern---------------------------------//
 /**
  * @brief 基础关卡场景类
  * 

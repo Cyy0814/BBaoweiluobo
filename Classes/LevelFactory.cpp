@@ -2,6 +2,7 @@
 #include "Level1.h"
 #include "Level2.h"
 
+//---------------------------------refactored with factory pattern---------------------------------//
 /**
  * @brief 根据关卡编号创建对应的关卡场景
  * 

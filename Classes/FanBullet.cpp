@@ -39,28 +39,28 @@ void FanBullet::moveToTarget() {
             this->unschedule("bullet_update");
             return;
         }
-        // µķλ
+        // 计算方向
         Vec2 direction = target->getPosition() - this->getPosition();
         float distance = direction.length();
-        // �ӵ���ת
-        this->setRotation(this->getRotation() + 5.0f); // ÿ֡��ת5�ȣ����Ե�����ת�ٶ�
-        if (distance < 10.0f) { // ����ӵ��ӽ�Ŀ��
-            target->getAttacked(damage); // �Թ�������˺�
+        // 子弹旋转
+        this->setRotation(this->getRotation() + 5.0f); // 每帧旋转5度，可以调整旋转速度
+        if (distance < 10.0f) { // 当子弹接近目标
+            target->getAttacked(damage); // 对怪物造成伤害
             this->stopAllActions();
             this->removeFromParent();
         }
         else if (target) {
-            // �����ӵ��ķ���
+            // 更新子弹的方向
             direction.normalize();
             this->setPosition(this->getPosition() + direction * speed * dt);
         }
     };
 
-    // ÿ֡���� updateFunc �������ӵ�λ��
+    // 每帧调用 updateFunc 更新子弹位置
     this->schedule(updateFunc, "bullet_update");
 }
 
 //void Bullet::targetDied() {
-//    target = nullptr; // ��Ŀ������Ϊ nullptr
-//    // ���߲�ȡ�����ʵ����ж�
+//    target = nullptr; // 将目标设置为 nullptr
+//    // 或者采取其他适当的判断
 //}

@@ -289,7 +289,7 @@ void SelectScene::gotoGameScene(Ref* sender)
     auto button = dynamic_cast<Button*>(sender);
     int levelNum = button->getTag();
     
-    /*Refactored with Factory Pattern*/
+    //---------------------------------refactored with factory pattern---------------------------------//
     // 使用工厂创建关卡
     auto level = LevelFactory::createLevel(levelNum);
     if (level) {

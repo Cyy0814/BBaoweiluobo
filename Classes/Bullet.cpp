@@ -45,7 +45,7 @@ void Bullet::moveToTarget() {
     this->runAction(sequence);
 }
 
-/*Refactored with Flyweight Pattern*/
+//---------------------------------refactored with flyweight pattern---------------------------------//
 void Bullet::setTarget(Monster* target) {
     this->target = target;
 }
