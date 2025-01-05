@@ -27,20 +27,31 @@ void Bullet::moveToTarget() {
         return;
     }
 
-    // 计算移动到目标的时间
+    // 璁＄畻绉诲姩鍒扮洰鏍囩殑鏃堕棿
     float distance = this->getPosition().distance(target->getPosition());
     float duration = distance / speed;
 
-    // 创建移动动作
+    // 鍒涘缓绉诲姩鍔ㄤ綔
     auto moveAction = MoveTo::create(duration, target->getPosition());
     auto removeSelf = RemoveSelf::create();
     auto damageCallback = CallFunc::create([this]() {
         if (target) {
-            target->getAttacked(damage); // 对怪物造成伤害
+            target->getAttacked(damage); // 瀵规�墿閫犳垚浼ゅ
         }
         });
 
-    // 运行动作序列
+    // 鍒涘缓鍔ㄤ綔搴忓垪
     auto sequence = Sequence::create(moveAction, damageCallback, removeSelf, nullptr);
     this->runAction(sequence);
+}
+
+/*Refactored with Flyweight Pattern*/
+void Bullet::setTarget(Monster* target) {
+    this->target = target;
+}
+
+void Bullet::onHitMonster(Monster* monster) {
+    if (monster) {
+        monster->getAttacked(damage);
+    }
 }

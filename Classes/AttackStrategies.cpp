@@ -2,17 +2,25 @@
 #include "BottleBullet.h"
 #include "ShitBullet.h" 
 #include "FanBullet.h"
+#include "BulletFlyweightFactory.h"
 
 USING_NS_CC;
 
+/*Refactored with Strategy Pattern*/
 // 瓶子塔的攻击实现
 void BottleAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float damage) {
     if (!target || !target->getParent()) return;
     
-    auto bullet = Bullet::createWithTarget(target, "Tower/Bottle/ID1_0.PNG", 1000.0f, damage);
-    if (bullet) {
-        bullet->setPosition(position);
-        target->getParent()->addChild(bullet);
+    /*Refactored with Flyweight Pattern*/
+    // 使用享元工厂获取子弹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Bottle/ID1_0.PNG", attackSpeed, attackDamage);
+    
+    // 设置目标并添加到场景
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet) {
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(getPosition());
+        this->getParent()->addChild(concreteBullet);
     }
 }
 
@@ -22,11 +30,16 @@ void FanAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float da
         return;
     }
     
-    // 创建并发射旋转弹药
-    auto bullet = FanBullet::createWithTarget(target, "Tower/Fan/ID4_6.PNG", 1000.0f, damage);
-    if (bullet) {
-        bullet->setPosition(position);
-        target->getParent()->addChild(bullet);
+     /*Refactored with Flyweight Pattern*/
+    // 使用享元工厂获取子弹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Fan/ID1_0.PNG", attackSpeed, attackDamage);
+    
+    // 设置目标并添加到场景
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet) {
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(getPosition());
+        this->getParent()->addChild(concreteBullet);
     }
 }
 
@@ -34,11 +47,14 @@ void FanAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float da
 void ShitAttackStrategy::attack(cocos2d::Vec2 position, Monster* target, float damage) {
     if (!target || !target->getParent()) return;
     
-    auto bullet = ShitBullet::createWithTarget(target, "Tower/Shit/ID2_43.PNG", 1000.0f, damage);
-    if (bullet) {
-        bullet->setPosition(position);
-        target->getParent()->addChild(bullet);
-        target->takeHalfspeed();
-        target->beSloweddown();
-    }
+     /*Refactored with Flyweight Pattern*/
+    // 使用享元工厂获取子弹
+    Flyweight* bullet = BulletFlyweightFactory::getBullet("Tower/Shit/ID2_43.PNG", attackSpeed, attackDamage);
+    
+    // 设置目标并添加到场景
+    Bullet* concreteBullet = dynamic_cast<Bullet*>(bullet);
+    if (concreteBullet) {
+        concreteBullet->setTarget(target);
+        concreteBullet->setPosition(getPosition());
+        this->getParent()->addChild(concreteBullet);
 } 

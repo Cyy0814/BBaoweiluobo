@@ -6,6 +6,8 @@
 #include "TowerState.h"
 #include "ui/CocosGUI.h"
 #include "IAttackStrategy.h"
+#include "BulletFlyweightFactory.h"
+#include "Bullet.h"
 using namespace cocos2d;
 using namespace cocos2d::ui;
 

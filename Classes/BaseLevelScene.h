@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Monster.h"
 #include "GameScene.h"
+#include "WaveManager.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -70,6 +71,10 @@ protected:
     vector<Bottle*> bottles;
     vector<Fan*> fans;
     vector<Shit*> shits;
+    WaveManager* waveManager;  // 波数管理器
+    
+    // 新增虚函数
+    virtual void setupWaves() = 0;  // 设置波数的纯虚函数
 };
 
 #endif 

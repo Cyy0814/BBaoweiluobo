@@ -6,6 +6,7 @@
 #include "BottleBullet.h"
 #include "Tower.h"
 #include "ui/CocosGUI.h"
+#include "BulletFlyweightFactory.h"
 
 class Bottle : public Tower {
 public:
@@ -19,7 +20,6 @@ public:
     void remove() override;
 
 private:
-    Bullet* bullet;
     Sprite* base;
 };
 

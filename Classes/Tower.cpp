@@ -9,7 +9,11 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace cocos2d;
 
-Tower::Tower() : level(1), attackSpeed(1.0f), towerType(0), currentState(nullptr) {
+Tower::Tower() : level(1), attackSpeed(1.0f), towerType(0), attackDamage(50), currentState(nullptr) {
+    // 初始化其他成员
+    attackRange_ = nullptr;
+    upgradeButton = nullptr;
+    removeButton = nullptr;
 }
 
 Tower::~Tower() {
@@ -17,6 +21,19 @@ Tower::~Tower() {
         delete currentState;
         currentState = nullptr;
     }
+}
+
+Tower* Tower::create(Vec2 position, int towerType) {
+    Tower* tower = new (std::nothrow) Tower();
+    if (tower && tower->initWithFile("tower_base.png")) {
+        tower->autorelease();
+        tower->towerType = towerType;
+        tower->setPosition(position);
+        // 初始化其他成员
+        return tower;
+    }
+    CC_SAFE_DELETE(tower);
+    return nullptr;
 }
 
 bool Tower::init() {
@@ -57,20 +74,16 @@ void Tower::update(float dt, std::vector<Monster*> monsters) {
     }
 }
 
-void Tower::attack()
-{
-    // 防御塔攻击逻辑
-    // 创建子弹并设置属性
+void Tower::attack() {
+    // 攻击策略
 }
 
-void Tower::upgrade()
-{
+void Tower::upgrade() {
     // 防御塔升级逻辑
     // 更新防御塔属性和外观
 }
 
-void Tower::remove()
-{
+void Tower::remove() {
     // 移除防御塔
     this->removeFromParentAndCleanup(true);
 }
@@ -123,7 +136,7 @@ void Tower::showUpgradeAndRemoveButtons() {
 
 void Tower::hideAttackRangeAndButtons() {
     // 隐藏攻击范围
-    if (attackRange) attackRange_->setVisible(false);
+    if (attackRange_) attackRange_->setVisible(false);
 
     // 隐藏升级按钮和移除按钮
     if (upgradeButton) upgradeButton->setVisible(false);
@@ -137,8 +150,7 @@ bool Tower::isMonsterInRange(Monster* monster) {
 void Tower::checkForMonstersInRange(std::vector<Monster*> monsters) {
     // 清空怪物列表
     monstersInRange.clear();
-    if (monsters.size())
-    {
+    if (monsters.size()) {
         for (Monster* monster : monsters) {
             if (isMonsterInRange(monster)) {
                 monstersInRange.push_back(monster);

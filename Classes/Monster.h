@@ -6,7 +6,7 @@
 #include "Global.h"
 #include "ui/CocosGUI.h"
 
-// Refactored with State Pattern
+//---------------------------------refactored with state pattern---------------------------------//
 class Monster : public cocos2d::Sprite {
     friend class MonsterState;
     friend class WalkState;
@@ -53,6 +53,7 @@ private:
     // 状态相关的成员变量
     MonsterState* currentState;
     cocos2d::Sprite* slowEffect = nullptr;
+
 };
 
 #endif

@@ -70,9 +70,15 @@ bool BaseLevelScene::init() {
     // 播放倒计时动画
     gameScene->createCountdownAnimation();
 
-    // 设置游戏循环
-    this->schedule(CC_SCHEDULE_SELECTOR(BaseLevelScene::startNextWave), 6.0f);
-    this->scheduleUpdate();
+    /*Refactored with composite Pattern*/
+    // 初始化波数管理器
+    waveManager = WaveManager::getInstance();
+    setupWaves();    // 调用子类实现的波数设置
+    
+    // 6秒后开始第一波
+    this->scheduleOnce([this](float dt) {
+        waveManager->startAllWaves();
+    }, 6.0f, "start_waves");
 
     return true;
 }
@@ -134,6 +140,11 @@ void BaseLevelScene::spawnMonsters(int waveIndex) {
 }
 
 void BaseLevelScene::endGame() {
+    // 清理波数管理器
+    if (waveManager) {
+        waveManager->cleanup();
+    }
+    
     monsters.clear();
     bottles.clear();
     fans.clear();
